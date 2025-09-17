@@ -1,0 +1,239 @@
+Installing dependencies from lock file
+Verifying lock file contents can be installed on current platform.
+Package operations: 98 installs, 0 updates, 0 removals
+  - Downloading symfony/flex (v2.8.2)
+  - Downloading symfony/runtime (v7.3.1)
+  - Downloading symfony/deprecation-contracts (v3.6.0)
+  - Downloading symfony/routing (v7.3.2)
+  - Downloading symfony/polyfill-mbstring (v1.33.0)
+  - Downloading symfony/polyfill-php83 (v1.33.0)
+  - Downloading symfony/http-foundation (v7.3.3)
+  - Downloading psr/event-dispatcher (1.0.0)
+  - Downloading symfony/event-dispatcher-contracts (v3.6.0)
+  - Downloading symfony/event-dispatcher (v7.3.3)
+  - Downloading symfony/var-dumper (v7.3.3)
+  - Downloading psr/log (3.0.2)
+  - Downloading symfony/error-handler (v7.3.2)
+  - Downloading symfony/http-kernel (v7.3.3)
+  - Downloading symfony/finder (v7.3.2)
+  - Downloading symfony/filesystem (v7.3.2)
+  - Downloading symfony/var-exporter (v7.3.3)
+  - Downloading psr/container (2.0.2)
+  - Downloading symfony/service-contracts (v3.6.0)
+  - Downloading symfony/dependency-injection (v7.3.3)
+  - Downloading symfony/config (v7.3.2)
+  - Downloading psr/cache (3.0.0)
+  - Downloading symfony/cache-contracts (v3.6.0)
+  - Downloading symfony/cache (v7.3.2)
+  - Downloading symfony/framework-bundle (v7.3.3)
+  - Downloading symfony/stopwatch (v7.3.0)
+  - Downloading symfony/polyfill-intl-normalizer (v1.33.0)
+  - Downloading symfony/polyfill-intl-grapheme (v1.33.0)
+  - Downloading symfony/string (v7.3.3)
+  - Downloading symfony/console (v7.3.3)
+  - Downloading doctrine/event-manager (2.0.1)
+  - Downloading doctrine/deprecations (1.1.5)
+  - Downloading doctrine/dbal (3.10.2)
+  - Downloading doctrine/migrations (3.9.4)
+  - Downloading doctrine/persistence (4.1.0)
+  - Downloading symfony/doctrine-bridge (v7.3.3)
+  - Downloading doctrine/sql-formatter (1.5.2)
+  - Downloading doctrine/doctrine-bundle (2.16.2)
+  - Downloading doctrine/doctrine-migrations-bundle (3.4.2)
+  - Downloading doctrine/lexer (3.0.1)
+  - Downloading doctrine/instantiator (2.0.0)
+  - Downloading doctrine/inflector (2.1.0)
+  - Downloading symfony/polyfill-php84 (v1.33.0)
+  - Downloading doctrine/collections (2.3.0)
+  - Downloading doctrine/orm (3.5.2)
+  - Downloading webmozart/assert (1.11.0)
+  - Downloading phpstan/phpdoc-parser (2.3.0)
+  - Downloading phpdocumentor/reflection-common (2.2.0)
+  - Downloading phpdocumentor/type-resolver (1.10.0)
+  - Downloading phpdocumentor/reflection-docblock (5.6.3)
+  - Downloading psr/clock (1.0.0)
+  - Downloading symfony/apache-pack (v1.0.1)
+  - Downloading symfony/http-client-contracts (v3.6.0)
+  - Downloading symfony/http-client (v7.3.3)
+  - Downloading composer/semver (3.4.4)
+  - Downloading symfony/asset-mapper (v7.3.3)
+  - Downloading symfony/clock (v7.3.0)
+  - Downloading symfony/messenger (v7.3.3)
+  - Downloading symfony/doctrine-messenger (v7.3.3)
+  - Downloading symfony/dotenv (v7.3.2)
+  - Downloading symfony/expression-language (v7.3.2)
+  - Downloading symfony/type-info (v7.3.3)
+  - Downloading symfony/property-info (v7.3.1)
+  - Downloading symfony/property-access (v7.3.3)
+  - Downloading symfony/polyfill-intl-icu (v1.33.0)
+  - Downloading symfony/options-resolver (v7.3.3)
+  - Downloading symfony/form (v7.3.3)
+  - Downloading symfony/intl (v7.3.3)
+  - Downloading symfony/polyfill-intl-idn (v1.33.0)
+  - Downloading symfony/mime (v7.3.2)
+  - Downloading egulias/email-validator (4.0.4)
+  - Downloading symfony/mailer (v7.3.3)
+  - Downloading monolog/monolog (3.9.0)
+  - Downloading symfony/monolog-bridge (v7.3.3)
+  - Downloading symfony/monolog-bundle (v3.10.0)
+  - Downloading symfony/notifier (v7.3.3)
+  - Downloading symfony/process (v7.3.3)
+  - Downloading symfony/password-hasher (v7.3.0)
+  - Downloading symfony/security-core (v7.3.3)
+  - Downloading symfony/security-http (v7.3.3)
+  - Downloading symfony/security-csrf (v7.3.0)
+  - Downloading symfony/security-bundle (v7.3.3)
+  - Downloading symfony/serializer (v7.3.3)
+  - Downloading symfony/translation-contracts (v3.6.0)
+  - Downloading symfony/translation (v7.3.3)
+  - Downloading twig/twig (v3.21.1)
+  - Downloading symfony/twig-bridge (v7.3.3)
+  - Downloading symfony/ux-autocomplete (v2.30.0)
+  - Downloading symfony/stimulus-bundle (v2.30.0)
+  - Downloading symfony/ux-turbo (v2.30.0)
+  - Downloading symfony/validator (v7.3.3)
+  - Downloading psr/link (2.0.1)
+  - Downloading symfony/web-link (v7.3.0)
+  - Downloading symfony/asset (v7.3.0)
+  - Downloading symfony/webpack-encore-bundle (v2.3.0)
+  - Downloading symfony/yaml (v7.3.3)
+  - Downloading symfony/twig-bundle (v7.3.2)
+  - Downloading twig/extra-bundle (v3.21.0)
+  - Installing symfony/flex (v2.8.2): Extracting archive
+  - Installing symfony/runtime (v7.3.1): Extracting archive
+  - Installing symfony/deprecation-contracts (v3.6.0): Extracting archive
+  - Installing symfony/routing (v7.3.2): Extracting archive
+  - Installing symfony/polyfill-mbstring (v1.33.0): Extracting archive
+  - Installing symfony/polyfill-php83 (v1.33.0): Extracting archive
+  - Installing symfony/http-foundation (v7.3.3): Extracting archive
+  - Installing psr/event-dispatcher (1.0.0): Extracting archive
+  - Installing symfony/event-dispatcher-contracts (v3.6.0): Extracting archive
+  - Installing symfony/event-dispatcher (v7.3.3): Extracting archive
+  - Installing symfony/var-dumper (v7.3.3): Extracting archive
+  - Installing psr/log (3.0.2): Extracting archive
+  - Installing symfony/error-handler (v7.3.2): Extracting archive
+  - Installing symfony/http-kernel (v7.3.3): Extracting archive
+  - Installing symfony/finder (v7.3.2): Extracting archive
+  - Installing symfony/filesystem (v7.3.2): Extracting archive
+  - Installing symfony/var-exporter (v7.3.3): Extracting archive
+  - Installing psr/container (2.0.2): Extracting archive
+  - Installing symfony/service-contracts (v3.6.0): Extracting archive
+  - Installing symfony/dependency-injection (v7.3.3): Extracting archive
+  - Installing symfony/config (v7.3.2): Extracting archive
+  - Installing psr/cache (3.0.0): Extracting archive
+  - Installing symfony/cache-contracts (v3.6.0): Extracting archive
+  - Installing symfony/cache (v7.3.2): Extracting archive
+  - Installing symfony/framework-bundle (v7.3.3): Extracting archive
+  - Installing symfony/stopwatch (v7.3.0): Extracting archive
+  - Installing symfony/polyfill-intl-normalizer (v1.33.0): Extracting archive
+  - Installing symfony/polyfill-intl-grapheme (v1.33.0): Extracting archive
+  - Installing symfony/string (v7.3.3): Extracting archive
+  - Installing symfony/console (v7.3.3): Extracting archive
+  - Installing doctrine/event-manager (2.0.1): Extracting archive
+  - Installing doctrine/deprecations (1.1.5): Extracting archive
+  - Installing doctrine/dbal (3.10.2): Extracting archive
+  - Installing doctrine/migrations (3.9.4): Extracting archive
+  - Installing doctrine/persistence (4.1.0): Extracting archive
+  - Installing symfony/doctrine-bridge (v7.3.3): Extracting archive
+  - Installing doctrine/sql-formatter (1.5.2): Extracting archive
+  - Installing doctrine/doctrine-bundle (2.16.2): Extracting archive
+  - Installing doctrine/doctrine-migrations-bundle (3.4.2): Extracting archive
+  - Installing doctrine/lexer (3.0.1): Extracting archive
+  - Installing doctrine/instantiator (2.0.0): Extracting archive
+  - Installing doctrine/inflector (2.1.0): Extracting archive
+  - Installing symfony/polyfill-php84 (v1.33.0): Extracting archive
+  - Installing doctrine/collections (2.3.0): Extracting archive
+  - Installing doctrine/orm (3.5.2): Extracting archive
+  - Installing webmozart/assert (1.11.0): Extracting archive
+  - Installing phpstan/phpdoc-parser (2.3.0): Extracting archive
+  - Installing phpdocumentor/reflection-common (2.2.0): Extracting archive
+  - Installing phpdocumentor/type-resolver (1.10.0): Extracting archive
+  - Installing phpdocumentor/reflection-docblock (5.6.3): Extracting archive
+  - Installing psr/clock (1.0.0): Extracting archive
+  - Installing symfony/apache-pack (v1.0.1)
+  - Installing symfony/http-client-contracts (v3.6.0): Extracting archive
+  - Installing symfony/http-client (v7.3.3): Extracting archive
+  - Installing composer/semver (3.4.4): Extracting archive
+  - Installing symfony/asset-mapper (v7.3.3): Extracting archive
+  - Installing symfony/clock (v7.3.0): Extracting archive
+  - Installing symfony/messenger (v7.3.3): Extracting archive
+  - Installing symfony/doctrine-messenger (v7.3.3): Extracting archive
+  - Installing symfony/dotenv (v7.3.2): Extracting archive
+  - Installing symfony/expression-language (v7.3.2): Extracting archive
+  - Installing symfony/type-info (v7.3.3): Extracting archive
+  - Installing symfony/property-info (v7.3.1): Extracting archive
+  - Installing symfony/property-access (v7.3.3): Extracting archive
+  - Installing symfony/polyfill-intl-icu (v1.33.0): Extracting archive
+  - Installing symfony/options-resolver (v7.3.3): Extracting archive
+  - Installing symfony/form (v7.3.3): Extracting archive
+  - Installing symfony/intl (v7.3.3): Extracting archive
+  - Installing symfony/polyfill-intl-idn (v1.33.0): Extracting archive
+  - Installing symfony/mime (v7.3.2): Extracting archive
+  - Installing egulias/email-validator (4.0.4): Extracting archive
+  - Installing symfony/mailer (v7.3.3): Extracting archive
+  - Installing monolog/monolog (3.9.0): Extracting archive
+  - Installing symfony/monolog-bridge (v7.3.3): Extracting archive
+  - Installing symfony/monolog-bundle (v3.10.0): Extracting archive
+  - Installing symfony/notifier (v7.3.3): Extracting archive
+  - Installing symfony/process (v7.3.3): Extracting archive
+  - Installing symfony/password-hasher (v7.3.0): Extracting archive
+  - Installing symfony/security-core (v7.3.3): Extracting archive
+  - Installing symfony/security-http (v7.3.3): Extracting archive
+  - Installing symfony/security-csrf (v7.3.0): Extracting archive
+  - Installing symfony/security-bundle (v7.3.3): Extracting archive
+  - Installing symfony/serializer (v7.3.3): Extracting archive
+  - Installing symfony/translation-contracts (v3.6.0): Extracting archive
+  - Installing symfony/translation (v7.3.3): Extracting archive
+  - Installing twig/twig (v3.21.1): Extracting archive
+  - Installing symfony/twig-bridge (v7.3.3): Extracting archive
+  - Installing symfony/ux-autocomplete (v2.30.0): Extracting archive
+  - Installing symfony/stimulus-bundle (v2.30.0): Extracting archive
+  - Installing symfony/ux-turbo (v2.30.0): Extracting archive
+  - Installing symfony/validator (v7.3.3): Extracting archive
+  - Installing psr/link (2.0.1): Extracting archive
+  - Installing symfony/web-link (v7.3.0): Extracting archive
+  - Installing symfony/asset (v7.3.0): Extracting archive
+  - Installing symfony/webpack-encore-bundle (v2.3.0): Extracting archive
+  - Installing symfony/yaml (v7.3.3): Extracting archive
+  - Installing symfony/twig-bundle (v7.3.2): Extracting archive
+  - Installing twig/extra-bundle (v3.21.0): Extracting archive
+Generating optimized autoload files
+83 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+
+Run composer recipes at any time to see the status of your Symfony recipes.
+
+Executing script cache:clear [KO]
+ [KO]
+Script cache:clear returned with error code 255
+!!  Symfony\Component\ErrorHandler\Error\ClassNotFoundError {#79
+!!    #message: """
+!!      Attempted to load class "DebugBundle" from namespace "Symfony\Bundle\DebugBundle".\n
+!!      Did you forget a "use" statement for another namespace?
+!!      """
+!!    #code: 0
+!!    #file: "./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php"
+!!    #line: 143
+!!    trace: {
+!!      ./vendor/symfony/framework-bundle/Kernel/MicroKernelTrait.php:143 { …}
+!!      ./vendor/symfony/http-kernel/Kernel.php:339 { …}
+!!      ./vendor/symfony/http-kernel/Kernel.php:743 { …}
+!!      ./vendor/symfony/http-kernel/Kernel.php:120 { …}
+!!      ./vendor/symfony/framework-bundle/Console/Application.php:177 { …}
+!!      ./vendor/symfony/framework-bundle/Console/Application.php:69 { …}
+!!      ./vendor/symfony/console/Application.php:194 { …}
+!!      ./vendor/symfony/runtime/Runner/Symfony/ConsoleApplicationRunner.php:49 { …}
+!!      ./vendor/autoload_runtime.php:29 { …}
+!!      ./bin/console:15 {
+!!        › \r
+!!        › require_once dirname(__DIR__).'/vendor/autoload_runtime.php';\r
+!!        › \r
+!!        arguments: {
+!!          "/workspace/loanpro/vendor/autoload_runtime.php"
+!!        }
+!!      }
+!!    }
+!!  }
+!!  2025-09-18T00:00:04+08:00 [critical] Uncaught Error: Class "Symfony\Bundle\DebugBundle\DebugBundle" not found
+!!  
+Script @auto-scripts was called via post-install-cmd

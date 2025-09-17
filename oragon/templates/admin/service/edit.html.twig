@@ -1,0 +1,296 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier {{ service.slug }} - Administration - Oragon{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-pencil me-2 text-primary"></i>Modifier {{ service.slug }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ path('admin_service_show', {id: service.id}) }}" class="btn btn-outline-info me-2">
+            <i class="bi bi-eye me-2"></i>Voir
+        </a>
+        <a href="{{ path('admin_service_index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+        </a>
+    </div>
+</div>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<div class="row">
+    <div class="col-lg-8">
+        {# Service configuration #}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-gear me-2"></i>Configuration du service
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_row(form.slug, {
+                            attr: {'class': 'form-control'}
+                        }) }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form_row(form.sortOrder, {
+                            attr: {'class': 'form-control'}
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    {{ form_widget(form.isActive, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(form.isActive, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                </div>
+            </div>
+        </div>
+        
+        {# Translations #}
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-translate me-2"></i>Traductions
+                </h5>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-primary" onclick="copyFromDefault()">
+                        <i class="bi bi-clipboard me-1"></i>Copier depuis défaut
+                    </button>
+                    <button type="button" class="btn btn-outline-success" onclick="translateAll()">
+                        <i class="bi bi-translate me-1"></i>Auto-traduire
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if languages|length > 0 %}
+                    <ul class="nav nav-tabs" id="translationTabs" role="tablist">
+                        {% for index, translation in form.translations %}
+                            {% set language = translation.vars.data.language %}
+                            {% set hasContent = translation.vars.data.title %}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                        id="tab-{{ language.code }}-tab" 
+                                        data-bs-toggle="tab" 
+                                        data-bs-target="#tab-{{ language.code }}" 
+                                        type="button" role="tab">
+                                    <span class="badge bg-primary me-2">{{ language.code|upper }}</span>
+                                    {{ language.name }}
+                                    {% if language.default %}
+                                        <i class="bi bi-star-fill text-warning ms-1" title="Langue par défaut"></i>
+                                    {% endif %}
+                                    {% if hasContent %}
+                                        <i class="bi bi-check-circle-fill text-success ms-1" title="Traduit"></i>
+                                    {% else %}
+                                        <i class="bi bi-exclamation-circle text-warning ms-1" title="Non traduit"></i>
+                                    {% endif %}
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <div class="tab-content" id="translationTabsContent">
+                        {% for index, translation in form.translations %}
+                            {% set language = translation.vars.data.language %}
+                            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                 id="tab-{{ language.code }}" 
+                                 role="tabpanel" 
+                                 aria-labelledby="tab-{{ language.code }}-tab">
+                                <div class="p-3">
+                                    <div class="mb-3">
+                                        {{ form_row(translation.title, {
+                                            attr: {
+                                                'class': 'form-control translation-field', 
+                                                'placeholder': 'Titre du service en ' ~ language.nativeName,
+                                                'data-language': language.code,
+                                                'data-field': 'title'
+                                            }
+                                        }) }}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        {{ form_row(translation.description, {
+                                            attr: {
+                                                'class': 'form-control translation-field', 
+                                                'placeholder': 'Description courte en ' ~ language.nativeName, 
+                                                'rows': 3,
+                                                'data-language': language.code,
+                                                'data-field': 'description'
+                                            }
+                                        }) }}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        {{ form_row(translation.detail, {
+                                            attr: {
+                                                'class': 'form-control translation-field', 
+                                                'placeholder': 'Description détaillée en ' ~ language.nativeName, 
+                                                'rows': 6,
+                                                'data-language': language.code,
+                                                'data-field': 'detail'
+                                            }
+                                        }) }}
+                                    </div>
+                                    
+                                    {% if translation.vars.data.createdAt %}
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            Créée le {{ translation.vars.data.createdAt|date('d/m/Y à H:i') }}
+                                            {% if translation.vars.data.updatedAt != translation.vars.data.createdAt %}
+                                                - Modifiée le {{ translation.vars.data.updatedAt|date('d/m/Y à H:i') }}
+                                            {% endif %}
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Aucune langue n'est configurée. 
+                        <a href="{{ path('admin_language_new') }}" class="alert-link">Créez d'abord une langue</a>.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Informations
+                </h6>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Statut :</dt>
+                    <dd class="col-sm-8">
+                        {% if service.active %}
+                            <span class="badge bg-success">Actif</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactif</span>
+                        {% endif %}
+                    </dd>
+                    
+                    <dt class="col-sm-4">Créé le :</dt>
+                    <dd class="col-sm-8">
+                        <small class="text-muted">{{ service.createdAt|date('d/m/Y à H:i') }}</small>
+                    </dd>
+                    
+                    <dt class="col-sm-4">Modifié le :</dt>
+                    <dd class="col-sm-8">
+                        <small class="text-muted">{{ service.updatedAt|date('d/m/Y à H:i') }}</small>
+                    </dd>
+                    
+                    <dt class="col-sm-4">Traductions :</dt>
+                    <dd class="col-sm-8">
+                        {% set completedTranslations = 0 %}
+                        {% for translation in service.translations %}
+                            {% if translation.title %}
+                                {% set completedTranslations = completedTranslations + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        <span class="badge bg-info">{{ completedTranslations }}/{{ service.translations|length }}</span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-2"></i>Enregistrer
+                    </button>
+                    <a href="{{ path('admin_service_show', {id: service.id}) }}" class="btn btn-outline-info">
+                        <i class="bi bi-eye me-2"></i>Voir
+                    </a>
+                    <a href="{{ path('admin_service_index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-danger text-white">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Zone de danger
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Supprimer ce service supprimera également toutes ses traductions.</p>
+                <form method="post" action="{{ path('admin_service_delete', {id: service.id}) }}" 
+                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash me-2"></i>Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
+
+{% block extra_javascripts %}
+    {{ parent() }}
+    <script>
+        // Copy content from default language to other languages
+        function copyFromDefault() {
+            const defaultFields = document.querySelectorAll('[data-language="fr"] .translation-field');
+            
+            defaultFields.forEach(function(defaultField) {
+                const fieldType = defaultField.dataset.field;
+                const defaultValue = defaultField.value;
+                
+                if (defaultValue) {
+                    const otherFields = document.querySelectorAll(`[data-field="${fieldType}"].translation-field:not([data-language="fr"])`);
+                    otherFields.forEach(function(field) {
+                        if (!field.value) {
+                            field.value = defaultValue;
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Auto-translation placeholder function
+        function translateAll() {
+            alert('Fonctionnalité de traduction automatique bientôt disponible !');
+        }
+        
+        // Update tab indicators when content changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const translationFields = document.querySelectorAll('.translation-field[data-field="title"]');
+            
+            translationFields.forEach(function(field) {
+                field.addEventListener('input', function() {
+                    updateTabIndicator(this.dataset.language, this.value.length > 0);
+                });
+            });
+        });
+        
+        function updateTabIndicator(languageCode, hasContent) {
+            const tab = document.querySelector(`#tab-${languageCode}-tab`);
+            if (tab) {
+                const indicator = tab.querySelector('.bi-check-circle-fill, .bi-exclamation-circle');
+                if (indicator) {
+                    if (hasContent) {
+                        indicator.className = 'bi bi-check-circle-fill text-success ms-1';
+                        indicator.title = 'Traduit';
+                    } else {
+                        indicator.className = 'bi bi-exclamation-circle text-warning ms-1';
+                        indicator.title = 'Non traduit';
+                    }
+                }
+            }
+        }
+    </script>
+{% endblock %}

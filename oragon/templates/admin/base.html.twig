@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Administration - Oragon{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚙️</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        {% block stylesheets %}
+            {# Bootstrap CSS #}
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+            {# Bootstrap Icons #}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+            <style>
+                :root {
+                    --bs-primary: #6f42c1;
+                    --bs-secondary: #6c757d;
+                    --admin-sidebar-width: 280px;
+                }
+                
+                [data-bs-theme="dark"] {
+                    --bs-body-bg: #1a1a1a;
+                    --bs-body-color: #ffffff;
+                    --bs-border-color: #333333;
+                }
+
+                .admin-sidebar {
+                    position: fixed;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 100;
+                    padding: 48px 0 0;
+                    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+                    width: var(--admin-sidebar-width);
+                    background-color: var(--bs-light);
+                }
+
+                [data-bs-theme="dark"] .admin-sidebar {
+                    background-color: var(--bs-dark);
+                    box-shadow: inset -1px 0 0 rgba(255, 255, 255, .1);
+                }
+
+                .admin-sidebar .nav-link {
+                    color: var(--bs-body-color);
+                    border-radius: 0;
+                }
+
+                .admin-sidebar .nav-link:hover {
+                    background-color: rgba(var(--bs-primary-rgb), 0.1);
+                }
+
+                .admin-sidebar .nav-link.active {
+                    background-color: var(--bs-primary);
+                    color: white;
+                }
+
+                .admin-main {
+                    margin-left: var(--admin-sidebar-width);
+                    min-height: 100vh;
+                    padding-top: 48px;
+                }
+
+                .admin-header {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1030;
+                    background-color: var(--bs-primary);
+                    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+                }
+
+                .stats-card {
+                    transition: transform 0.2s ease-in-out;
+                }
+
+                .stats-card:hover {
+                    transform: translateY(-2px);
+                }
+
+                .theme-toggle {
+                    cursor: pointer;
+                    transition: transform 0.2s ease-in-out;
+                }
+
+                .theme-toggle:hover {
+                    transform: scale(1.1);
+                }
+
+                @media (max-width: 768px) {
+                    .admin-sidebar {
+                        transform: translateX(-100%);
+                        transition: transform 0.3s ease-in-out;
+                    }
+                    
+                    .admin-sidebar.show {
+                        transform: translateX(0);
+                    }
+                    
+                    .admin-main {
+                        margin-left: 0;
+                    }
+                }
+            </style>
+        {% endblock %}
+
+        {% block javascripts %}
+            {# Bootstrap JS with Popper.js #}
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        {% endblock %}
+    </head>
+
+    <body>
+        {# Admin Header #}
+        <nav class="navbar navbar-dark admin-header">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler d-md-none me-3" type="button" onclick="toggleSidebar()">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('admin_dashboard') }}">
+                        <i class="bi bi-gear-fill me-2"></i>Administration Oragon
+                    </a>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    {# Language Selector #}
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" 
+                                id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                title="{{ 'language.change_interface'|trans({}, 'admin') }}">
+                            <i class="bi bi-translate me-1"></i>
+                            <span id="currentLanguageCode">{{ app.request.locale|upper }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            {% for language in admin_languages %}
+                                <li>
+                                    <a class="dropdown-item{{ app.request.locale == language.code ? ' active' : '' }}" 
+                                       href="{{ path('admin_language_switch', {'locale': language.code}) }}">
+                                        <span class="badge bg-primary me-2">{{ language.code|upper }}</span>
+                                        {{ language.nativeName }}
+                                        {% if language.isDefault %}
+                                            <i class="bi bi-star-fill text-warning ms-1" title="Langue par défaut"></i>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li><span class="dropdown-item-text">Aucune langue disponible</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <button id="themeToggle" class="btn btn-outline-light theme-toggle me-3" type="button" 
+                            title="Basculer le thème">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+                    <a href="{{ path('homepage') }}" class="btn btn-outline-light" 
+                       title="Voir le site">
+                        <i class="bi bi-eye-fill me-1"></i>Voir le site
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        {# Sidebar #}
+        <nav id="adminSidebar" class="admin-sidebar collapse d-md-block">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link{% if app.request.get('_route') == 'admin_dashboard' %} active{% endif %}" 
+                           href="{{ path('admin_dashboard') }}">
+                            <i class="bi bi-house-fill me-2"></i>{{ 'navigation.dashboard'|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if app.request.get('_route') starts with 'admin_service_' %} active{% endif %}" 
+                           href="{{ path('admin_service_index') }}">
+                            <i class="bi bi-list-ul me-2"></i>{{ 'navigation.services'|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if app.request.get('_route') starts with 'admin_language_' %} active{% endif %}" 
+                           href="{{ path('admin_language_index') }}">
+                            <i class="bi bi-globe me-2"></i>{{ 'navigation.languages'|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if app.request.get('_route') starts with 'admin_translation_' %} active{% endif %}" 
+                           href="{{ path('admin_translation_index') }}">
+                            <i class="bi bi-translate me-2"></i>{{ 'navigation.translations'|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        {# Main Content #}
+        <main class="admin-main">
+            <div class="container-fluid py-4">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
+
+        {% block extra_javascripts %}
+            <script>
+                // Theme management
+                const getStoredTheme = () => localStorage.getItem("theme")
+                const setStoredTheme = theme => localStorage.setItem("theme", theme)
+
+                const getPreferredTheme = () => {
+                    const storedTheme = getStoredTheme()
+                    if (storedTheme) {
+                        return storedTheme
+                    }
+                    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+                }
+
+                const setTheme = theme => {
+                    document.documentElement.setAttribute("data-bs-theme", theme)
+                    
+                    const themeToggle = document.querySelector("#themeToggle")
+                    if (themeToggle) {
+                        const icon = themeToggle.querySelector("i")
+                        if (theme === "dark") {
+                            icon.className = "bi bi-sun-fill"
+                        } else {
+                            icon.className = "bi bi-moon-fill"
+                        }
+                    }
+                }
+
+                setTheme(getPreferredTheme())
+
+                window.addEventListener("DOMContentLoaded", () => {
+                    const themeToggle = document.querySelector("#themeToggle")
+                    if (themeToggle) {
+                        themeToggle.addEventListener("click", () => {
+                            const currentTheme = document.documentElement.getAttribute("data-bs-theme")
+                            const newTheme = currentTheme === "dark" ? "light" : "dark"
+                            setStoredTheme(newTheme)
+                            setTheme(newTheme)
+                        })
+                    }
+                })
+
+                // Sidebar toggle for mobile
+                function toggleSidebar() {
+                    const sidebar = document.querySelector("#adminSidebar")
+                    sidebar.classList.toggle("show")
+                }
+
+                // Auto-hide alerts after 5 seconds
+                document.addEventListener("DOMContentLoaded", function() {
+                    const alerts = document.querySelectorAll(".alert:not(.alert-permanent)")
+                    alerts.forEach(function(alert) {
+                        setTimeout(function() {
+                            const bsAlert = new bootstrap.Alert(alert)
+                            bsAlert.close()
+                        }, 5000)
+                    })
+                })
+
+                // Confirm delete actions
+                document.addEventListener("DOMContentLoaded", function() {
+                    const deleteButtons = document.querySelectorAll("button[data-bs-toggle=\"modal\"][data-action=\"delete\"]")
+                    deleteButtons.forEach(function(button) {
+                        button.addEventListener("click", function() {
+                            const itemName = this.dataset.itemName || "cet élément"
+                            if (confirm(`Êtes-vous sûr de vouloir supprimer ${itemName} ?`)) {
+                                const form = document.querySelector(this.dataset.target)
+                                if (form) {
+                                    form.submit()
+                                }
+                            }
+                        })
+                    })
+                })
+            </script>
+        {% endblock %}
+
+        {# Flash messages - positioned for admin interface #}
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show position-fixed" 
+                     style="top: 60px; right: 20px; z-index: 1040; max-width: 400px;" role="alert">
+                    <i class="bi bi-{% if type == 'success' %}check-circle{% elseif type == 'error' or type == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </body>
+</html>

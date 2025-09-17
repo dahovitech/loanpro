@@ -1,0 +1,197 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Nouveau service - Administration - Oragon{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-plus-circle me-2 text-success"></i>Nouveau service
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ path('admin_service_index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+        </a>
+    </div>
+</div>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<div class="row">
+    <div class="col-lg-8">
+        {# Service configuration #}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-gear me-2"></i>Configuration du service
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_row(form.slug, {
+                            attr: {'class': 'form-control', 'placeholder': 'mon-service'}
+                        }) }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form_row(form.sortOrder, {
+                            attr: {'class': 'form-control', 'value': '0'}
+                        }) }}
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    {{ form_widget(form.isActive, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(form.isActive, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                </div>
+            </div>
+        </div>
+        
+        {# Translations #}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-translate me-2"></i>Traductions
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if languages|length > 0 %}
+                    <ul class="nav nav-tabs" id="translationTabs" role="tablist">
+                        {% for index, translation in form.translations %}
+                            {% set language = translation.vars.data.language %}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                        id="tab-{{ language.code }}-tab" 
+                                        data-bs-toggle="tab" 
+                                        data-bs-target="#tab-{{ language.code }}" 
+                                        type="button" role="tab">
+                                    <span class="badge bg-primary me-2">{{ language.code|upper }}</span>
+                                    {{ language.name }}
+                                    {% if language.default %}
+                                        <i class="bi bi-star-fill text-warning ms-1" title="Langue par défaut"></i>
+                                    {% endif %}
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <div class="tab-content" id="translationTabsContent">
+                        {% for index, translation in form.translations %}
+                            {% set language = translation.vars.data.language %}
+                            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                 id="tab-{{ language.code }}" 
+                                 role="tabpanel" 
+                                 aria-labelledby="tab-{{ language.code }}-tab">
+                                <div class="p-3">
+                                    <div class="mb-3">
+                                        {{ form_row(translation.title, {
+                                            attr: {'class': 'form-control', 'placeholder': 'Titre du service en ' ~ language.nativeName}
+                                        }) }}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        {{ form_row(translation.description, {
+                                            attr: {'class': 'form-control', 'placeholder': 'Description courte en ' ~ language.nativeName, 'rows': 3}
+                                        }) }}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        {{ form_row(translation.detail, {
+                                            attr: {'class': 'form-control', 'placeholder': 'Description détaillée en ' ~ language.nativeName, 'rows': 6}
+                                        }) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Aucune langue n'est configurée. 
+                        <a href="{{ path('admin_language_new') }}" class="alert-link">Créez d'abord une langue</a>.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Conseils
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Le <strong>slug</strong> sera généré automatiquement depuis le premier titre saisi
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Remplissez au moins la langue par défaut
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Les champs vides utiliseront la traduction par défaut
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Vous pouvez désactiver le service pour le cacher du public
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-lg me-2"></i>Créer le service
+                    </button>
+                    <a href="{{ path('admin_service_index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-lg me-2"></i>Annuler
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
+
+{% block extra_javascripts %}
+    {{ parent() }}
+    <script>
+        // Auto-generate slug from first title
+        document.addEventListener('DOMContentLoaded', function() {
+            const slugInput = document.querySelector('input[name*="[slug]"]');
+            const titleInputs = document.querySelectorAll('input[name*="[title]"]');
+            
+            function generateSlug(text) {
+                return text
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, '') // Remove special characters
+                    .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+                    .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
+            }
+            
+            if (slugInput && titleInputs.length > 0) {
+                titleInputs.forEach(function(titleInput) {
+                    titleInput.addEventListener('input', function() {
+                        if (!slugInput.value || slugInput.dataset.autoGenerated) {
+                            const slug = generateSlug(this.value);
+                            slugInput.value = slug;
+                            slugInput.dataset.autoGenerated = 'true';
+                        }
+                    });
+                });
+                
+                slugInput.addEventListener('input', function() {
+                    delete this.dataset.autoGenerated;
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,240 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ service.slug }} - Administration - Oragon{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-eye me-2 text-info"></i>{{ service.slug }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ path('admin_service_edit', {id: service.id}) }}" class="btn btn-primary me-2">
+            <i class="bi bi-pencil me-2"></i>Modifier
+        </a>
+        <a href="{{ path('service_show', {slug: service.slug}) }}" class="btn btn-outline-success me-2" target="_blank">
+            <i class="bi bi-eye me-2"></i>Voir sur le site
+        </a>
+        <a href="{{ path('admin_service_index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Informations générales
+                </h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Slug :</dt>
+                    <dd class="col-sm-9"><code>{{ service.slug }}</code></dd>
+                    
+                    <dt class="col-sm-3">Statut :</dt>
+                    <dd class="col-sm-9">
+                        {% if service.active %}
+                            <span class="badge bg-success">Actif</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactif</span>
+                        {% endif %}
+                    </dd>
+                    
+                    <dt class="col-sm-3">Ordre :</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-info">{{ service.sortOrder }}</span>
+                    </dd>
+                    
+                    <dt class="col-sm-3">Créé le :</dt>
+                    <dd class="col-sm-9">{{ service.createdAt|date('d/m/Y à H:i') }}</dd>
+                    
+                    <dt class="col-sm-3">Modifié le :</dt>
+                    <dd class="col-sm-9">{{ service.updatedAt|date('d/m/Y à H:i') }}</dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-translate me-2"></i>Traductions
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if service.translations|length > 0 %}
+                    <div class="accordion" id="translationsAccordion">
+                        {% for translation in service.translations %}
+                            {% set language = translation.language %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#translation-{{ language.code }}" 
+                                            aria-expanded="{% if loop.first %}true{% else %}false{% endif %}">
+                                        <span class="badge bg-primary me-3">{{ language.code|upper }}</span>
+                                        <strong>{{ language.name }}</strong>
+                                        {% if language.default %}
+                                            <i class="bi bi-star-fill text-warning ms-2" title="Langue par défaut"></i>
+                                        {% endif %}
+                                        {% if translation.title %}
+                                            <i class="bi bi-check-circle-fill text-success ms-2" title="Traduit"></i>
+                                        {% else %}
+                                            <i class="bi bi-exclamation-circle text-warning ms-2" title="Non traduit"></i>
+                                        {% endif %}
+                                    </button>
+                                </h2>
+                                <div id="translation-{{ language.code }}" 
+                                     class="accordion-collapse collapse {% if loop.first %}show{% endif %}" 
+                                     data-bs-parent="#translationsAccordion">
+                                    <div class="accordion-body">
+                                        {% if translation.title %}
+                                            <div class="mb-3">
+                                                <h6 class="text-muted mb-2">Titre</h6>
+                                                <h5>{{ translation.title }}</h5>
+                                            </div>
+                                            
+                                            {% if translation.description %}
+                                                <div class="mb-3">
+                                                    <h6 class="text-muted mb-2">Description</h6>
+                                                    <p>{{ translation.description|nl2br }}</p>
+                                                </div>
+                                            {% endif %}
+                                            
+                                            {% if translation.detail %}
+                                                <div class="mb-3">
+                                                    <h6 class="text-muted mb-2">Détails</h6>
+                                                    <div>{{ translation.detail|nl2br }}</div>
+                                                </div>
+                                            {% endif %}
+                                            
+                                            <small class="text-muted">
+                                                <i class="bi bi-clock me-1"></i>
+                                                Créée le {{ translation.createdAt|date('d/m/Y à H:i') }}
+                                                {% if translation.updatedAt != translation.createdAt %}
+                                                    - Modifiée le {{ translation.updatedAt|date('d/m/Y à H:i') }}
+                                                {% endif %}
+                                            </small>
+                                        {% else %}
+                                            <div class="text-center py-3 text-muted">
+                                                <i class="bi bi-translate display-6"></i>
+                                                <p class="mb-0 mt-2">Aucune traduction disponible pour cette langue</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-translate display-1 text-muted"></i>
+                        <h5 class="text-muted mt-3">Aucune traduction</h5>
+                        <p class="text-muted">Ce service n'a pas encore de traductions.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-lightning-fill me-2"></i>Actions rapides
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ path('admin_service_edit', {id: service.id}) }}" class="btn btn-primary">
+                        <i class="bi bi-pencil me-2"></i>Modifier
+                    </a>
+                    
+                    {% if service.active %}
+                        <a href="{{ path('service_show', {slug: service.slug}) }}" class="btn btn-success" target="_blank">
+                            <i class="bi bi-eye me-2"></i>Voir sur le site
+                        </a>
+                    {% endif %}
+                    
+                    <form method="post" action="{{ path('admin_service_toggle_status', {id: service.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_status' ~ service.id) }}">
+                        <button type="submit" class="btn btn-{{ service.active ? 'warning' : 'success' }} w-100">
+                            <i class="bi bi-{{ service.active ? 'pause' : 'play' }}-fill me-2"></i>
+                            {{ service.active ? 'Désactiver' : 'Activer' }}
+                        </button>
+                    </form>
+                    
+                    <form method="post" action="{{ path('admin_service_duplicate', {id: service.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('duplicate' ~ service.id) }}">
+                        <button type="submit" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-files me-2"></i>Dupliquer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-bar-chart me-2"></i>Statistiques des traductions
+                </h6>
+            </div>
+            <div class="card-body">
+                {% set completedTranslations = 0 %}
+                {% set totalTranslations = service.translations|length %}
+                
+                {% for translation in service.translations %}
+                    {% if translation.title %}
+                        {% set completedTranslations = completedTranslations + 1 %}
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-primary">{{ completedTranslations }}</h4>
+                        <small class="text-muted">Complètes</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-warning">{{ totalTranslations - completedTranslations }}</h4>
+                        <small class="text-muted">Manquantes</small>
+                    </div>
+                </div>
+                
+                {% if totalTranslations > 0 %}
+                    {% set percentage = (completedTranslations / totalTranslations * 100)|round %}
+                    <div class="progress mt-3">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ percentage }}%" 
+                             aria-valuenow="{{ percentage }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ percentage }}%
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-danger text-white">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Zone de danger
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Supprimer ce service supprimera également {{ service.translations|length }} traduction(s).</p>
+                <form method="post" action="{{ path('admin_service_delete', {id: service.id}) }}" 
+                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash me-2"></i>Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

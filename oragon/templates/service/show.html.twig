@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ service.getTitle(currentLanguage.code) }} - Oragon{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ path('homepage') }}">
+                    <i class="bi bi-house-fill me-1"></i>Accueil
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ service.getTitle(currentLanguage.code) }}
+            </li>
+        </ol>
+    </nav>
+    
+    {# Service content #}
+    <div class="row">
+        <div class="col-lg-8">
+            {% set translation = service.getTranslationForLanguage(currentLanguage) %}
+            {% set defaultLanguage = null %}
+            {% for language in languages %}
+                {% if language.default %}
+                    {% set defaultLanguage = language %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if not translation or not translation.title %}
+                {% set translation = service.getTranslationForLanguage(defaultLanguage) %}
+            {% endif %}
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="card-title display-6">
+                            <i class="bi bi-gear-fill text-primary me-2"></i>
+                            {{ translation ? translation.title : service.slug }}
+                        </h1>
+                        
+                        {# Language indicator if content is not in current language #}
+                        {% if translation and translation.language != currentLanguage %}
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-info-circle me-1"></i>
+                                {{ translation.language.nativeName }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if translation and translation.description %}
+                        <div class="lead mb-4">
+                            {{ translation.description|nl2br }}
+                        </div>
+                    {% endif %}
+                    
+                    {% if translation and translation.detail %}
+                        <div class="content">
+                            {{ translation.detail|nl2br }}
+                        </div>
+                    {% endif %}
+                    
+                    {% if not translation or (not translation.description and not translation.detail) %}
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Le contenu détaillé de ce service n'est pas encore disponible dans la langue sélectionnée.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            {# Language selector #}
+            {% if languages|length > 1 %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-globe me-2"></i>Langue d'affichage
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select" onchange="switchLanguage(this.value)">
+                            {% for language in languages %}
+                                <option value="{{ language.code }}" 
+                                        {% if currentLanguage.code == language.code %}selected{% endif %}>
+                                    {{ language.nativeName }}
+                                    {% if language.default %} (Défaut){% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        
+                        {# Show available translations #}
+                        <div class="mt-3">
+                            <small class="text-muted d-block mb-2">Traductions disponibles :</small>
+                            {% for language in languages %}
+                                {% set langTranslation = service.getTranslationForLanguage(language) %}
+                                <span class="badge {% if langTranslation and langTranslation.title %}bg-success{% else %}bg-secondary{% endif %} me-1 mb-1">
+                                    {{ language.code|upper }}
+                                    {% if langTranslation and langTranslation.title %}
+                                        <i class="bi bi-check-lg ms-1"></i>
+                                    {% else %}
+                                        <i class="bi bi-x-lg ms-1"></i>
+                                    {% endif %}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            {# Service info #}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Informations
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Identifiant :</dt>
+                        <dd class="col-sm-7"><code>{{ service.slug }}</code></dd>
+                        
+                        <dt class="col-sm-5">Mis à jour :</dt>
+                        <dd class="col-sm-7">
+                            <small class="text-muted">{{ service.updatedAt|date('d/m/Y') }}</small>
+                        </dd>
+                        
+                        {% if translation and translation.updatedAt %}
+                            <dt class="col-sm-5">Traduction :</dt>
+                            <dd class="col-sm-7">
+                                <small class="text-muted">{{ translation.updatedAt|date('d/m/Y') }}</small>
+                            </dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+            
+            {# Actions #}
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-lightning-fill me-2"></i>Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('homepage') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left me-2"></i>Retour aux services
+                        </a>
+                        
+                        <a href="{{ path('service_search') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-search me-2"></i>Rechercher d'autres services
+                        </a>
+                        
+                        <button class="btn btn-outline-info" onclick="shareService()">
+                            <i class="bi bi-share me-2"></i>Partager
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+    {{ parent() }}
+    <script>
+        function shareService() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ service.getTitle(currentLanguage.code)|e('js') }}',
+                    text: '{{ translation and translation.description ? translation.description|e('js') : 'Découvrez ce service sur Oragon' }}',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(function() {
+                    alert('Lien copié dans le presse-papiers !');
+                }).catch(function() {
+                    alert('URL: ' + window.location.href);
+                });
+            }
+        }
+        
+        function switchLanguage(languageCode) {
+            axios.post(`/api/switch-language/${languageCode}`)
+                .then(response => {
+                    if (response.data.success) {
+                        window.location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors du changement de langue:', error);
+                    window.location.reload();
+                });
+        }
+    </script>
+{% endblock %}

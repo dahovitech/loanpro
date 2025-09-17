@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher{% if query %} - {{ query }}{% endif %} - Oragon{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    {# Search header #}
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-search text-primary me-3"></i>
+                    Rechercher des services
+                </h1>
+                {% if query %}
+                    <p class="lead text-muted">
+                        Résultats pour "<strong>{{ query }}</strong>"
+                    </p>
+                {% else %}
+                    <p class="lead text-muted">
+                        Trouvez le service qui vous intéresse
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    {# Search form #}
+    <div class="row mb-5">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" action="{{ path('service_search') }}">
+                        <div class="row align-items-end">
+                            <div class="col-md-6 mb-3">
+                                <label for="searchQuery" class="form-label">
+                                    <i class="bi bi-search me-1"></i>Terme de recherche
+                                </label>
+                                <input type="text" id="searchQuery" name="q" class="form-control form-control-lg" 
+                                       value="{{ query }}" placeholder="Tapez votre recherche..." 
+                                       autofocus>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="languageFilter" class="form-label">
+                                    <i class="bi bi-globe me-1"></i>Langue
+                                </label>
+                                <select id="languageFilter" name="lang" class="form-select form-select-lg" 
+                                        onchange="this.form.submit()">
+                                    <option value="">Toutes les langues</option>
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}" 
+                                                {% if currentLanguage.code == language.code %}selected{% endif %}>
+                                            {{ language.nativeName }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {# Results section #}
+    {% if query %}
+        <div class="row">
+            <div class="col-12">
+                {% if services|length > 0 %}
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>
+                            <i class="bi bi-list-ul text-secondary me-2"></i>
+                            {{ services|length }} résultat{{ services|length > 1 ? 's' : '' }} trouvé{{ services|length > 1 ? 's' : '' }}
+                        </h3>
+                        <button class="btn btn-outline-secondary" onclick="clearSearch()">
+                            <i class="bi bi-x-circle me-1"></i>Effacer la recherche
+                        </button>
+                    </div>
+                    
+                    <div class="row">
+                        {% for service in services %}
+                            {% set defaultLanguage = null %}
+                            {% for language in languages %}
+                                {% if language.default %}
+                                    {% set defaultLanguage = language %}
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% set translation = service.getTranslationForLanguage(currentLanguage) %}
+                            {% if not translation or not translation.title %}
+                                {% set translation = service.getTranslationForLanguage(defaultLanguage) %}
+                            {% endif %}
+                            
+                            <div class="col-lg-6 col-xl-4 mb-4">
+                                <div class="card h-100 service-card">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">
+                                            <i class="bi bi-gear-fill text-primary me-2"></i>
+                                            {% if translation and translation.title %}
+                                                {{ translation.title|replace({(query): '<mark>' ~ query ~ '</mark>'})|raw }}
+                                            {% else %}
+                                                {{ service.slug }}
+                                            {% endif %}
+                                        </h5>
+                                        
+                                        {% if translation and translation.description %}
+                                            <p class="card-text flex-grow-1">
+                                                {% set description = translation.description %}
+                                                {% if query and query in description %}
+                                                    {{ description|replace({(query): '<mark>' ~ query ~ '</mark>'})|raw }}
+                                                {% else %}
+                                                    {{ description }}
+                                                {% endif %}
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <div class="mt-auto">
+                                            <a href="{{ path('service_show', {slug: service.slug}) }}" 
+                                               class="btn btn-primary">
+                                                <i class="bi bi-arrow-right me-2"></i>En savoir plus
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    {# Show language indicator if different from current #}
+                                    {% if translation and translation.language != currentLanguage %}
+                                        <div class="card-footer bg-warning text-dark">
+                                            <small>
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                Résultat en {{ translation.language.nativeName }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-search display-1 text-muted mb-4"></i>
+                        <h4 class="text-muted mb-3">Aucun résultat trouvé</h4>
+                        <p class="text-muted mb-4">
+                            Nous n'avons trouvé aucun service correspondant à "<strong>{{ query }}</strong>".
+                        </p>
+                        <div>
+                            <button class="btn btn-primary me-2" onclick="clearSearch()">
+                                <i class="bi bi-arrow-counterclockwise me-2"></i>Nouvelle recherche
+                            </button>
+                            <a href="{{ path('homepage') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-house me-2"></i>Voir tous les services
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        {# Show popular/recent services when no search query #}
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-4">
+                    <i class="bi bi-star text-warning me-2"></i>
+                    Services populaires
+                </h3>
+                
+                {% set popularServices = services|slice(0, 6) %}
+                {% if popularServices|length > 0 %}
+                    <div class="row">
+                        {% for service in popularServices %}
+                            {% if service.active %}
+                                {% set defaultLanguage = null %}
+                                {% for language in languages %}
+                                    {% if language.default %}
+                                        {% set defaultLanguage = language %}
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% set translation = service.getTranslationForLanguage(currentLanguage) %}
+                                {% if not translation or not translation.title %}
+                                    {% set translation = service.getTranslationForLanguage(defaultLanguage) %}
+                                {% endif %}
+                                
+                                <div class="col-lg-6 col-xl-4 mb-4">
+                                    <div class="card h-100 service-card">
+                                        <div class="card-body d-flex flex-column">
+                                            <h6 class="card-title">
+                                                <i class="bi bi-gear-fill text-primary me-2"></i>
+                                                {{ translation ? translation.title : service.slug }}
+                                            </h6>
+                                            {% if translation and translation.description %}
+                                                <p class="card-text flex-grow-1 small">
+                                                    {{ translation.description|length > 100 ? translation.description[:100] ~ '...' : translation.description }}
+                                                </p>
+                                            {% endif %}
+                                            <div class="mt-auto">
+                                                <a href="{{ path('service_show', {slug: service.slug}) }}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-arrow-right me-1"></i>Voir
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-1 text-muted mb-4"></i>
+                        <h5 class="text-muted mb-3">Aucun service disponible</h5>
+                        <p class="text-muted">Revenez bientôt pour découvrir nos services.</p>
+                        <a href="{{ path('homepage') }}" class="btn btn-primary">
+                            <i class="bi bi-house me-2"></i>Retour à l'accueil
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+    {{ parent() }}
+    <script>
+        function clearSearch() {
+            document.getElementById('searchQuery').value = '';
+            document.getElementById('searchQuery').focus();
+            
+            // Clear URL parameters
+            const url = new URL(window.location);
+            url.searchParams.delete('q');
+            url.searchParams.delete('lang');
+            window.history.pushState({}, '', url);
+            
+            // Reload page
+            window.location.reload();
+        }
+        
+        // Auto-submit on language change
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.querySelector('form[action*="search"]');
+            const searchInput = document.getElementById('searchQuery');
+            
+            // Focus on search input
+            if (searchInput && !searchInput.value) {
+                searchInput.focus();
+            }
+            
+            // Submit form on Enter
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchForm.submit();
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

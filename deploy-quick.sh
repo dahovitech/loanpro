@@ -88,7 +88,23 @@ EOF
     mkdir -p var/{cache,log,sessions}
     chmod -R 777 var/
     
-    # Créer .htaccess
+    # Créer .htaccess à la racine (pour redirection vers public/)
+    cat > .htaccess << 'EOF'
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # remove "www" from URI
+    RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
+    RewriteRule ^ http://%1%{REQUEST_URI} [L,R=301]
+    # force HTTPS
+    RewriteCond %{HTTPS} !on
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # use public as starting point
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
+</IfModule>
+EOF
+    
+    # Créer .htaccess pour Symfony (dans public/)
     cat > public/.htaccess << 'EOF'
 DirectoryIndex index.php
 

@@ -1,0 +1,73 @@
+[2025-09-19 06:16:25] 🚀 Démarrage du déploiement de LoanPro...
+🤔 Confirmer le déploiement en production ? (y/N): [2025-09-19 06:16:25] 🔍 Vérification des prérequis...
+[SUCCESS] Prérequis validés
+[2025-09-19 06:16:25] 🔧 Préparation de l'application...
+[2025-09-19 06:16:41] 📦 Installation des dépendances...
+Installing dependencies from lock file
+Verifying lock file contents can be installed on current platform.
+Package operations: 0 installs, 0 updates, 34 removals
+  - Removing theseer/tokenizer (1.2.3)
+  - Removing symfony/web-profiler-bundle (v7.3.3)
+  - Removing symfony/maker-bundle (v1.64.0)
+  - Removing symfony/dom-crawler (v7.3.3)
+  - Removing symfony/debug-bundle (v7.3.0)
+  - Removing symfony/css-selector (v7.3.0)
+  - Removing symfony/browser-kit (v7.3.2)
+  - Removing staabm/side-effects-detector (1.0.5)
+  - Removing sebastian/version (5.0.2)
+  - Removing sebastian/type (5.1.3)
+  - Removing sebastian/recursion-context (6.0.3)
+  - Removing sebastian/object-reflector (4.0.1)
+  - Removing sebastian/object-enumerator (6.0.1)
+  - Removing sebastian/lines-of-code (3.0.1)
+  - Removing sebastian/global-state (7.0.2)
+  - Removing sebastian/exporter (6.3.0)
+  - Removing sebastian/environment (7.2.1)
+  - Removing sebastian/diff (6.0.2)
+  - Removing sebastian/complexity (4.0.1)
+  - Removing sebastian/comparator (6.3.2)
+  - Removing sebastian/code-unit-reverse-lookup (4.0.1)
+  - Removing sebastian/code-unit (3.0.3)
+  - Removing sebastian/cli-parser (3.0.2)
+  - Removing phpunit/phpunit (11.5.39)
+  - Removing phpunit/php-timer (7.0.1)
+  - Removing phpunit/php-text-template (4.0.1)
+  - Removing phpunit/php-invoker (5.0.1)
+  - Removing phpunit/php-file-iterator (5.1.0)
+  - Removing phpunit/php-code-coverage (11.0.11)
+  - Removing phar-io/version (3.2.1)
+  - Removing phar-io/manifest (2.0.4)
+  - Removing nikic/php-parser (v5.6.1)
+  - Removing myclabs/deep-copy (1.13.4)
+  - Removing masterminds/html5 (2.10.0)
+Generating optimized autoload files
+85 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+
+Run composer recipes at any time to see the status of your Symfony recipes.
+
+Executing script cache:clear [OK]
+Executing script assets:install public [OK]
+
+[SUCCESS] Application préparée
+[2025-09-19 06:16:52] 📦 Création du package de déploiement...
+[SUCCESS] Package créé: loanpro-deployment.tar.gz
+[2025-09-19 06:16:57] 🚀 Déploiement via FTP...
+  open `loanpro.achatrembourse.online' [Resolving host address...]                                                                  cd `public_html' [Connecting...]cd `public_html' [Sending commands...]                                        Getting directory contents (0) [Waiting for response...]                                                          rm `extract.sh' [Waiting for response...]                                           `loanpro-deployment.tar.gz' at 0 (0%) [Waiting for response...]`loanpro-deployment.tar.gz' at 1794072 (14%) [Sending data]                                                                   `/dev/stdin' at 0 [Waiting for response...]                                             put: /tmp/tmp.vZFouy7297/<<EOD: No such file or directory
+Unknown command `tar'.
+rm `loanpro-deployment.tar.gz' [Waiting for response...]                                                          chmod: Access failed: 550 /public_html/public: No such file or directory
+chmod: Access failed: 550 /public_html/var: No such file or directory
+Déploiement extrait avec succès !
+Unknown command `EOD'.
+chmod `extract.sh' [Waiting for response...]                                              [SUCCESS] Déploiement FTP terminé
+[2025-09-19 06:17:01] 🧹 Nettoyage...
+[SUCCESS] Nettoyage terminé
+[SUCCESS] 🎉 Déploiement terminé avec succès !
+
+🌐 Application accessible sur: https://loanpro.achatrembourse.online
+📋 Prochaines étapes:
+   1. Connectez-vous en SSH: ssh mrjoker@46.202.129.197
+   2. Extrayez le déploiement: cd ~/public_html && ./extract.sh
+   3. Configurez la base de données si nécessaire
+[2025-09-19 06:17:02] 🧹 Nettoyage...
+[SUCCESS] Nettoyage terminé

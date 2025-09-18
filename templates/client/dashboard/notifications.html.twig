@@ -1,0 +1,448 @@
+{% extends 'client/base.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-bell text-primary me-2"></i>
+                Mes Notifications
+            </h1>
+            <div>
+                <button class="btn btn-outline-primary me-2" id="markAllRead">
+                    <i class="fas fa-check-double me-1"></i>Tout marquer comme lu
+                </button>
+                <button class="btn btn-outline-secondary" id="refreshNotifications">
+                    <i class="fas fa-sync me-1"></i>Actualiser
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter and Stats -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="statusFilter" class="form-label">Filtrer par statut</label>
+                        <select class="form-select" id="statusFilter">
+                            <option value="">Toutes les notifications</option>
+                            <option value="unread">Non lues</option>
+                            <option value="read">Lues</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="typeFilter" class="form-label">Type de notification</label>
+                        <select class="form-select" id="typeFilter">
+                            <option value="">Tous les types</option>
+                            <option value="loan">Prêts</option>
+                            <option value="message">Messages</option>
+                            <option value="system">Système</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="searchFilter" class="form-label">Recherche</label>
+                        <input type="text" class="form-control" id="searchFilter" placeholder="Rechercher...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-primary">
+                            <i class="fas fa-bell fa-2x"></i>
+                            <h4 class="mt-2">{{ notifications|length }}</h4>
+                            <small class="text-muted">Total</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-warning">
+                            <i class="fas fa-bell-slash fa-2x"></i>
+                            <h4 class="mt-2">{{ notifications|filter(n => not n.isRead)|length }}</h4>
+                            <small class="text-muted">Non lues</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if notifications|length > 0 %}
+    <!-- Notifications List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body p-0">
+                    <div id="notificationsList">
+                        {% for notification in notifications %}
+                            <div class="notification-item list-group-item list-group-item-action {{ not notification.isRead ? 'bg-light border-start border-primary border-3' : '' }}"
+                                 data-notification-id="{{ notification.id }}" 
+                                 data-read="{{ notification.isRead ? 'true' : 'false' }}"
+                                 data-type="{{ notification.type|default('system') }}">
+                                <div class="d-flex w-100 justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="notification-icon me-3">
+                                                {% if notification.type == 'loan' %}
+                                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                                        <i class="fas fa-money-bill-wave"></i>
+                                                    </div>
+                                                {% elseif notification.type == 'message' %}
+                                                    <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 {{ not notification.isRead ? 'fw-bold' : '' }}">
+                                                    {{ notification.title }}
+                                                    {% if not notification.isRead %}
+                                                        <span class="badge bg-primary ms-2">Nouveau</span>
+                                                    {% endif %}
+                                                </h6>
+                                                <p class="mb-1 text-muted">{{ notification.message }}</p>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    {{ notification.createdAt|date('d/m/Y à H:i') }}
+                                                    {% if notification.type %}
+                                                        <span class="ms-2">
+                                                            <i class="fas fa-tag me-1"></i>
+                                                            {% if notification.type == 'loan' %}
+                                                                Prêt
+                                                            {% elseif notification.type == 'message' %}
+                                                                Message
+                                                            {% else %}
+                                                                Système
+                                                            {% endif %}
+                                                        </span>
+                                                    {% endif %}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-actions">
+                                        {% if not notification.isRead %}
+                                            <button class="btn btn-sm btn-outline-primary mark-read" 
+                                                    data-notification-id="{{ notification.id }}"
+                                                    title="Marquer comme lu">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        {% endif %}
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle ms-1" 
+                                                    type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                {% if not notification.isRead %}
+                                                    <li>
+                                                        <button class="dropdown-item mark-read" data-notification-id="{{ notification.id }}">
+                                                            <i class="fas fa-check me-2"></i>Marquer comme lu
+                                                        </button>
+                                                    </li>
+                                                {% else %}
+                                                    <li>
+                                                        <button class="dropdown-item mark-unread" data-notification-id="{{ notification.id }}">
+                                                            <i class="fas fa-undo me-2"></i>Marquer comme non lu
+                                                        </button>
+                                                    </li>
+                                                {% endif %}
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <button class="dropdown-item text-danger delete-notification" data-notification-id="{{ notification.id }}">
+                                                        <i class="fas fa-trash me-2"></i>Supprimer
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if notifications|length > 20 %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Pagination des notifications">
+                    <ul class="pagination justify-content-center">
+                        <!-- Pagination logic would go here -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+
+{% else %}
+    <!-- Empty State -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-bell-slash fa-5x text-muted mb-4"></i>
+                    <h3 class="text-muted mb-3">Aucune notification</h3>
+                    <p class="lead text-muted mb-4">
+                        Vous n'avez pas encore de notifications. Nous vous tiendrons informé de l'évolution de vos demandes.
+                    </p>
+                    <a href="{{ path('client_dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Retour au Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<!-- Help Section -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-info-circle text-info me-2"></i>À propos des notifications
+                </h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-bell me-1"></i>Types de notifications</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-money-bill-wave text-success me-2"></i>Mises à jour sur vos prêts</li>
+                            <li><i class="fas fa-envelope text-info me-2"></i>Nouveaux messages</li>
+                            <li><i class="fas fa-cog text-secondary me-2"></i>Informations système</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-cog me-1"></i>Paramètres</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-envelope text-primary me-2"></i>Notifications par email</li>
+                            <li><i class="fas fa-mobile-alt text-primary me-2"></i>Notifications push</li>
+                            <li><i class="fas fa-volume-up text-primary me-2"></i>Notifications sonores</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-clock me-1"></i>Fréquence</h6>
+                        <p class="text-muted">
+                            Les notifications sont mises à jour en temps réel. 
+                            Vous recevrez également un résumé quotidien par email.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const statusFilter = document.getElementById('statusFilter');
+            const typeFilter = document.getElementById('typeFilter');
+            const searchFilter = document.getElementById('searchFilter');
+
+            function filterNotifications() {
+                const notifications = document.querySelectorAll('.notification-item');
+                const statusValue = statusFilter.value;
+                const typeValue = typeFilter.value;
+                const searchValue = searchFilter.value.toLowerCase();
+
+                notifications.forEach(notification => {
+                    const isRead = notification.dataset.read === 'true';
+                    const type = notification.dataset.type;
+                    const text = notification.textContent.toLowerCase();
+
+                    let matchesStatus = true;
+                    if (statusValue === 'read') matchesStatus = isRead;
+                    if (statusValue === 'unread') matchesStatus = !isRead;
+
+                    const matchesType = !typeValue || type === typeValue;
+                    const matchesSearch = !searchValue || text.includes(searchValue);
+
+                    notification.style.display = matchesStatus && matchesType && matchesSearch ? '' : 'none';
+                });
+            }
+
+            statusFilter.addEventListener('change', filterNotifications);
+            typeFilter.addEventListener('change', filterNotifications);
+            searchFilter.addEventListener('input', filterNotifications);
+
+            // Mark as read functionality
+            document.querySelectorAll('.mark-read').forEach(button => {
+                button.addEventListener('click', function() {
+                    const notificationId = this.dataset.notificationId;
+                    markNotificationAsRead(notificationId);
+                });
+            });
+
+            // Mark as unread functionality
+            document.querySelectorAll('.mark-unread').forEach(button => {
+                button.addEventListener('click', function() {
+                    const notificationId = this.dataset.notificationId;
+                    markNotificationAsUnread(notificationId);
+                });
+            });
+
+            // Mark all as read
+            document.getElementById('markAllRead').addEventListener('click', function() {
+                const unreadNotifications = document.querySelectorAll('[data-read="false"]');
+                if (unreadNotifications.length === 0) {
+                    showNotification('Info', 'Toutes les notifications sont déjà lues', 'info');
+                    return;
+                }
+
+                if (confirm(`Marquer ${unreadNotifications.length} notification(s) comme lue(s) ?`)) {
+                    unreadNotifications.forEach(notification => {
+                        const notificationId = notification.dataset.notificationId;
+                        markNotificationAsRead(notificationId, false);
+                    });
+                    showNotification('Succès', 'Toutes les notifications ont été marquées comme lues', 'success');
+                }
+            });
+
+            // Refresh notifications
+            document.getElementById('refreshNotifications').addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                icon.classList.add('fa-spin');
+
+                fetch('{{ path('api_notifications_unread') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification('Notifications', 'Notifications mises à jour', 'info');
+                        setTimeout(() => window.location.reload(), 1000);
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        showNotification('Erreur', 'Impossible de mettre à jour les notifications', 'danger');
+                    })
+                    .finally(() => {
+                        icon.classList.remove('fa-spin');
+                    });
+            });
+
+            // Mark notification as read
+            function markNotificationAsRead(notificationId, showMessage = true) {
+                fetch(`{{ path('api_notification_read', {id: '__ID__'}) }}`.replace('__ID__', notificationId), {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const notification = document.querySelector(`[data-notification-id="${notificationId}"]`);
+                        if (notification) {
+                            notification.dataset.read = 'true';
+                            notification.classList.remove('bg-light', 'border-start', 'border-primary', 'border-3');
+                            
+                            // Remove "Nouveau" badge
+                            const badge = notification.querySelector('.badge');
+                            if (badge) badge.remove();
+                            
+                            // Remove "Mark as read" button
+                            const markReadBtn = notification.querySelector('.mark-read');
+                            if (markReadBtn) markReadBtn.remove();
+                            
+                            // Update title font weight
+                            const title = notification.querySelector('h6');
+                            if (title) title.classList.remove('fw-bold');
+                        }
+                        
+                        if (showMessage) {
+                            showNotification('Succès', 'Notification marquée comme lue', 'success');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    if (showMessage) {
+                        showNotification('Erreur', 'Impossible de marquer la notification comme lue', 'danger');
+                    }
+                });
+            }
+
+            // Auto-refresh every 60 seconds
+            setInterval(() => {
+                fetch('{{ path('api_notifications_unread') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.count > 0) {
+                            // There are new notifications, could show a toast or update count
+                            console.log(`${data.count} nouvelles notifications`);
+                        }
+                    })
+                    .catch(error => console.error('Erreur lors de la vérification des nouvelles notifications:', error));
+            }, 60000);
+
+            // Auto-mark as read when clicking on notification
+            document.querySelectorAll('.notification-item').forEach(notification => {
+                notification.addEventListener('click', function() {
+                    const isRead = this.dataset.read === 'true';
+                    if (!isRead) {
+                        const notificationId = this.dataset.notificationId;
+                        markNotificationAsRead(notificationId, false);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .notification-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .notification-item:hover {
+            background-color: #f8f9fa !important;
+        }
+        
+        .notification-icon {
+            flex-shrink: 0;
+        }
+        
+        .notification-actions {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .notification-item:hover .notification-actions {
+            opacity: 1;
+        }
+        
+        .list-group-item {
+            border-left: none !important;
+            border-right: none !important;
+            border-top: 1px solid #dee2e6;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .list-group-item:first-child {
+            border-top: none;
+        }
+        
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+{% endblock %}

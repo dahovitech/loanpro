@@ -1,0 +1,394 @@
+{% extends 'client/base.html.twig' %}
+
+{% block title %}Conversation avec {{ recipient.fullName }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('client_dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ path('client_messages') }}">Messages</a></li>
+                        <li class="breadcrumb-item active">{{ recipient.fullName }}</li>
+                    </ol>
+                </nav>
+                <h1 class="h3 mb-0">
+                    <div class="d-flex align-items-center">
+                        {% if recipient.roles and 'ROLE_ADMIN' in recipient.roles %}
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                        {% else %}
+                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            {{ recipient.fullName }}
+                            {% if recipient.roles and 'ROLE_ADMIN' in recipient.roles %}
+                                <span class="badge bg-primary ms-2">Conseiller</span>
+                            {% endif %}
+                            <div class="text-muted small">{{ recipient.email }}</div>
+                        </div>
+                    </div>
+                </h1>
+            </div>
+            <div>
+                <button class="btn btn-outline-info me-2" id="refreshMessages">
+                    <i class="fas fa-sync me-1"></i>Actualiser
+                </button>
+                <a href="{{ path('client_messages') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <!-- Messages Container -->
+        <div class="card shadow">
+            <div class="card-header py-3 bg-primary text-white">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-comments me-2"></i>Conversation
+                    <span class="badge bg-light text-primary ms-2">{{ messages|length }} message(s)</span>
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                <!-- Messages List -->
+                <div id="messagesContainer" class="messages-container" style="height: 500px; overflow-y: auto;">
+                    {% if messages|length > 0 %}
+                        {% for message in messages %}
+                            <div class="message-item border-bottom p-3 {{ message.sender.id == app.user.id ? 'sent' : 'received' }}">
+                                <div class="d-flex {{ message.sender.id == app.user.id ? 'justify-content-end' : 'justify-content-start' }}">
+                                    <div class="message-bubble {{ message.sender.id == app.user.id ? 'bg-primary text-white' : 'bg-light' }}" style="max-width: 70%; border-radius: 15px; padding: 15px;">
+                                        <div class="message-header mb-2">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <strong class="message-subject">{{ message.subject }}</strong>
+                                                <small class="message-time {{ message.sender.id == app.user.id ? 'text-white-50' : 'text-muted' }}">
+                                                    {{ message.sentAt|date('d/m/Y à H:i') }}
+                                                </small>
+                                            </div>
+                                            <small class="message-sender {{ message.sender.id == app.user.id ? 'text-white-50' : 'text-muted' }}">
+                                                {{ message.sender.id == app.user.id ? 'Vous' : message.sender.fullName }}
+                                            </small>
+                                        </div>
+                                        <div class="message-content">
+                                            {{ message.content|nl2br }}
+                                        </div>
+                                        {% if not message.isRead and message.recipient.id == app.user.id %}
+                                            <div class="mt-2">
+                                                <span class="badge bg-warning">Nouveau</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Aucun message dans cette conversation</h5>
+                            <p class="text-muted">Envoyez votre premier message ci-dessous.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Message Composer -->
+                <div class="card-footer">
+                    {{ form_start(form, {'attr': {'id': 'messageForm'}}) }}
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                {{ form_row(form.subject, {'attr': {'class': 'form-control', 'placeholder': 'Sujet du message'}}) }}
+                            </div>
+                            <div class="col-12 mb-3">
+                                {{ form_row(form.content, {'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Votre message...'}}) }}
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="text-muted small">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Appuyez sur Ctrl+Entrée pour envoyer rapidement
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="sendButton">
+                                        <i class="fas fa-paper-plane me-1"></i>Envoyer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-lightbulb me-2"></i>Conseils pour une communication efficace
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Soyez précis dans vos demandes</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Mentionnez votre numéro de dossier si applicable</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Joignez les documents nécessaires</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Répondez dans les délais indiqués</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Utilisez un objet clair et descriptif</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Restez professionnel et courtois</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-clock me-2"></i>Temps de réponse
+                </h6>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-2">
+                    <i class="fas fa-clock fa-2x text-info"></i>
+                </div>
+                <h5 class="text-primary">24-48h</h5>
+                <p class="text-muted mb-0">Temps de réponse moyen</p>
+                <small class="text-muted">Du lundi au vendredi</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageForm = document.getElementById('messageForm');
+            const sendButton = document.getElementById('sendButton');
+            const recipientId = {{ recipient.id }};
+
+            // Scroll to bottom of messages
+            function scrollToBottom() {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            // Initial scroll to bottom
+            scrollToBottom();
+
+            // Handle form submission
+            messageForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const originalText = sendButton.innerHTML;
+                
+                sendButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Envoi...';
+                sendButton.disabled = true;
+
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showNotification('Succès', 'Message envoyé avec succès', 'success');
+                        
+                        // Reset form
+                        document.getElementById('message_subject').value = '';
+                        document.getElementById('message_content').value = '';
+                        
+                        // Refresh messages
+                        setTimeout(refreshMessages, 1000);
+                    } else {
+                        throw new Error('Erreur lors de l\'envoi');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showNotification('Erreur', 'Impossible d\'envoyer le message', 'danger');
+                })
+                .finally(() => {
+                    sendButton.innerHTML = originalText;
+                    sendButton.disabled = false;
+                });
+            });
+
+            // Keyboard shortcut: Ctrl+Enter to send
+            document.getElementById('message_content').addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    messageForm.dispatchEvent(new Event('submit'));
+                }
+            });
+
+            // Refresh messages function
+            function refreshMessages() {
+                const refreshBtn = document.getElementById('refreshMessages');
+                const icon = refreshBtn.querySelector('i');
+                
+                icon.classList.add('fa-spin');
+                
+                fetch(`{{ path('api_conversation_messages', {userId: recipient.id}) }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateMessagesDisplay(data.messages);
+                        showNotification('Messages', 'Messages mis à jour', 'info');
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        showNotification('Erreur', 'Impossible de mettre à jour les messages', 'danger');
+                    })
+                    .finally(() => {
+                        icon.classList.remove('fa-spin');
+                    });
+            }
+
+            // Update messages display
+            function updateMessagesDisplay(messages) {
+                const container = messagesContainer;
+                let html = '';
+
+                if (messages.length === 0) {
+                    html = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Aucun message dans cette conversation</h5>
+                            <p class="text-muted">Envoyez votre premier message ci-dessous.</p>
+                        </div>
+                    `;
+                } else {
+                    messages.forEach(message => {
+                        const isSent = message.sender_id == {{ app.user.id }};
+                        const alignClass = isSent ? 'justify-content-end' : 'justify-content-start';
+                        const bubbleClass = isSent ? 'bg-primary text-white' : 'bg-light';
+                        const timeClass = isSent ? 'text-white-50' : 'text-muted';
+                        const senderClass = isSent ? 'text-white-50' : 'text-muted';
+                        const senderName = isSent ? 'Vous' : message.sender_name;
+
+                        html += `
+                            <div class="message-item border-bottom p-3 ${isSent ? 'sent' : 'received'}">
+                                <div class="d-flex ${alignClass}">
+                                    <div class="message-bubble ${bubbleClass}" style="max-width: 70%; border-radius: 15px; padding: 15px;">
+                                        <div class="message-header mb-2">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <strong class="message-subject">${message.subject}</strong>
+                                                <small class="message-time ${timeClass}">
+                                                    ${new Date(message.sent_at).toLocaleDateString('fr-FR')} à ${new Date(message.sent_at).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}
+                                                </small>
+                                            </div>
+                                            <small class="message-sender ${senderClass}">
+                                                ${senderName}
+                                            </small>
+                                        </div>
+                                        <div class="message-content">
+                                            ${message.content.replace(/\n/g, '<br>')}
+                                        </div>
+                                        ${!message.is_read && !isSent ? '<div class="mt-2"><span class="badge bg-warning">Nouveau</span></div>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                container.innerHTML = html;
+                scrollToBottom();
+            }
+
+            // Refresh button
+            document.getElementById('refreshMessages').addEventListener('click', refreshMessages);
+
+            // Auto-refresh every 30 seconds
+            setInterval(refreshMessages, 30000);
+
+            // Mark messages as read when the page loads
+            setTimeout(() => {
+                fetch('{{ path('api_conversation_messages', {userId: recipient.id}) }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Messages are automatically marked as read by the controller
+                    })
+                    .catch(error => console.error('Erreur lors du marquage comme lu:', error));
+            }, 1000);
+        });
+    </script>
+
+    <style>
+        .messages-container {
+            background: #f8f9fa;
+        }
+        
+        .message-item.sent {
+            background: linear-gradient(90deg, transparent 30%, rgba(0, 123, 255, 0.05) 100%);
+        }
+        
+        .message-item.received {
+            background: linear-gradient(90deg, rgba(108, 117, 125, 0.05) 0%, transparent 70%);
+        }
+        
+        .message-bubble {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            animation: messageSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message-subject {
+            font-size: 0.9em;
+        }
+        
+        .message-time {
+            font-size: 0.75em;
+        }
+        
+        .message-sender {
+            font-size: 0.8em;
+        }
+        
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .messages-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+    </style>
+{% endblock %}

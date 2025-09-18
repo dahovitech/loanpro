@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Espace Client{% endblock %} - MonPrêt</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('client') }}
+    {% endblock %}
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{{ path('client_dashboard') }}">
+                <i class="fas fa-home me-2"></i>MonPrêt - Espace Client
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') == 'client_dashboard' ? 'active' : '' }}" href="{{ path('client_dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') starts with 'client_loan' ? 'active' : '' }}" href="{{ path('client_loans') }}">
+                            <i class="fas fa-money-bill-wave me-1"></i>Mes Prêts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') starts with 'client_message' ? 'active' : '' }}" href="{{ path('client_messages') }}">
+                            <i class="fas fa-envelope me-1"></i>Messages
+                            <span class="badge bg-danger ms-1" id="unread-messages-count" style="display: none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') == 'client_notifications' ? 'active' : '' }}" href="{{ path('client_notifications') }}">
+                            <i class="fas fa-bell me-1"></i>Notifications
+                            <span class="badge bg-warning ms-1" id="unread-notifications-count" style="display: none;">0</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>{{ app.user.fullName }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ path('app_profile') }}">
+                                <i class="fas fa-user me-2"></i>Mon Profil
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_settings') }}">
+                                <i class="fas fa-cog me-2"></i>Paramètres
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ path('app_logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show m-3" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <!-- Main Content -->
+    <main class="container-fluid px-4 py-3">
+        {% block body %}{% endblock %}
+    </main>
+
+    <!-- Real-time notifications -->
+    <div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    {% block javascripts %}
+        {{ encore_entry_script_tags('client') }}
+    {% endblock %}
+    
+    <script>
+        // Real-time updates
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update notification and message counts
+            function updateCounts() {
+                // Update unread notifications count
+                fetch('{{ path('api_notifications_unread') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        const badge = document.getElementById('unread-notifications-count');
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = 'inline';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    });
+
+                // Update unread messages count
+                fetch('{{ path('api_messages_unread_count') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        const badge = document.getElementById('unread-messages-count');
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = 'inline';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    });
+            }
+
+            // Update counts on page load
+            updateCounts();
+
+            // Update counts every 30 seconds
+            setInterval(updateCounts, 30000);
+
+            // Check for new notifications every minute
+            setInterval(function() {
+                fetch('{{ path('api_messages_new') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.messages.length > 0) {
+                            data.messages.forEach(message => {
+                                showNotification('Nouveau message', message.content, 'info');
+                            });
+                        }
+                    });
+            }, 60000);
+        });
+
+        // Show notification function
+        function showNotification(title, message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `toast align-items-center text-bg-${type} border-0`;
+            notification.setAttribute('role', 'alert');
+            notification.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>${title}</strong><br>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            container.appendChild(notification);
+            
+            const toast = new bootstrap.Toast(notification);
+            toast.show();
+            
+            // Remove from DOM after hiding
+            notification.addEventListener('hidden.bs.toast', () => {
+                notification.remove();
+            });
+        }
+    </script>
+</body>
+</html>

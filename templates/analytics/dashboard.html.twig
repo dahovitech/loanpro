@@ -1,0 +1,655 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Dashboard Analytique{% endblock %}
+
+{% block body %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-chart-line text-primary me-2"></i>
+        Dashboard Analytique
+    </h1>
+    <div class="d-sm-flex">
+        <button class="btn btn-primary btn-sm shadow-sm me-2" id="refreshData">
+            <i class="fas fa-sync fa-sm text-white-50 me-1"></i>Actualiser
+        </button>
+        <div class="dropdown">
+            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-download fa-sm me-1"></i>Exporter
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" onclick="exportReport('pdf')">
+                    <i class="fas fa-file-pdf me-2"></i>PDF
+                </a></li>
+                <li><a class="dropdown-item" href="#" onclick="exportReport('excel')">
+                    <i class="fas fa-file-excel me-2"></i>Excel
+                </a></li>
+                <li><a class="dropdown-item" href="#" onclick="exportReport('csv')">
+                    <i class="fas fa-file-csv me-2"></i>CSV
+                </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Real-time Metrics Alert -->
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle me-2"></i>
+    <strong>Mise à jour en temps réel</strong> - Les données sont actualisées automatiquement toutes les 30 secondes.
+    <span class="badge bg-primary ms-2" id="lastUpdateTime">{{ "now"|date("H:i:s") }}</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<!-- KPI Cards Row -->
+<div class="row mb-4">
+    <!-- Total Loans KPI -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total des Prêts
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalLoans">
+                            {{ kpis.total_loans|number_format }}
+                        </div>
+                        <div class="text-xs text-muted">
+                            <span class="text-success me-1">
+                                <i class="fas fa-arrow-up"></i> {{ kpis.growth_rate }}%
+                            </span>
+                            ce mois
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Loans KPI -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Prêts Actifs
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="activeLoans">
+                            {{ kpis.active_loans|number_format }}
+                        </div>
+                        <div class="text-xs text-muted">
+                            Portfolio en cours
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue KPI -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Revenus (Mois)
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="monthlyRevenue">
+                            {{ kpis.revenue_this_month|number_format(0, ',', ' ') }} €
+                        </div>
+                        <div class="text-xs text-muted">
+                            Revenus mensuels
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-euro-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval Rate KPI -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Taux d'Approbation
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="approvalRate">
+                            {{ kpis.approval_rate }}%
+                        </div>
+                        <div class="text-xs text-muted">
+                            Performance globale
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-percentage fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row">
+    <!-- Loan Trends Chart -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-chart-area me-2"></i>Évolution des Prêts
+                </h6>
+                <div class="dropdown no-arrow">
+                    <select class="form-select form-select-sm" id="chartPeriod" onchange="updateChart()">
+                        <option value="7">7 jours</option>
+                        <option value="30" selected>30 jours</option>
+                        <option value="90">90 jours</option>
+                        <option value="365">1 an</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="loansTrendChart" width="100%" height="35"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Breakdown -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-chart-pie me-2"></i>Répartition Revenus
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="revenueChart" width="100%" height="150"></canvas>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-primary"></i> Intérêts
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-success"></i> Frais
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-info"></i> Autres
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Secondary Metrics Row -->
+<div class="row">
+    <!-- Conversion Funnel -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-funnel-dollar me-2"></i>Entonnoir de Conversion
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="conversionFunnelChart" width="100%" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Risk Distribution -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-shield-alt me-2"></i>Distribution des Risques
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="riskDistributionChart" width="100%" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Performance Metrics Table -->
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-table me-2"></i>Métriques de Performance
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="performanceTable">
+                        <thead>
+                            <tr>
+                                <th>Métrique</th>
+                                <th>Valeur Actuelle</th>
+                                <th>Objectif</th>
+                                <th>Tendance</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Taux d'Approbation</td>
+                                <td id="perf-approval">{{ kpis.approval_rate }}%</td>
+                                <td>75%</td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success"></i>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Excellent</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Taux de Défaut</td>
+                                <td id="perf-default">{{ kpis.default_rate }}%</td>
+                                <td>&lt; 5%</td>
+                                <td>
+                                    <i class="fas fa-arrow-down text-success"></i>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Excellent</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Conversion Client</td>
+                                <td id="perf-conversion">{{ kpis.conversion_rate }}%</td>
+                                <td>15%</td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success"></i>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">Moyen</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Satisfaction Client</td>
+                                <td id="perf-satisfaction">{{ kpis.customer_satisfaction }}/5</td>
+                                <td>4.0</td>
+                                <td>
+                                    <i class="fas fa-arrow-up text-success"></i>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Excellent</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Activity -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-clock me-2"></i>Activité Temps Réel
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush" id="realTimeActivity">
+                    {% for activity in recent_activity|slice(0, 5) %}
+                        <div class="list-group-item border-0 p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-circle text-success" style="font-size: 0.5rem;"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <div class="small font-weight-bold">{{ activity.action }}</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">
+                                        {{ activity.createdAt|date('H:i:s') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        <span class="badge bg-primary" id="activeUsers">{{ kpis.active_sessions }}</span>
+                        utilisateurs actifs
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions Row -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-bolt me-2"></i>Actions Rapides
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ path('analytics_loans') }}" class="btn btn-outline-primary btn-lg d-block">
+                            <i class="fas fa-chart-bar fa-2x mb-2"></i><br>
+                            Analyse Prêts
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ path('analytics_users') }}" class="btn btn-outline-success btn-lg d-block">
+                            <i class="fas fa-users fa-2x mb-2"></i><br>
+                            Analyse Clients
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ path('analytics_financial') }}" class="btn btn-outline-info btn-lg d-block">
+                            <i class="fas fa-calculator fa-2x mb-2"></i><br>
+                            Analyse Financière
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ path('analytics_reports') }}" class="btn btn-outline-warning btn-lg d-block">
+                            <i class="fas fa-file-alt fa-2x mb-2"></i><br>
+                            Rapports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        let charts = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            initializeRealTimeUpdates();
+            initializeExportFunctionality();
+        });
+
+        // Initialize all charts
+        function initializeCharts() {
+            // Loans Trend Chart
+            const loansTrendCtx = document.getElementById('loansTrendChart').getContext('2d');
+            charts.loansTrend = new Chart(loansTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: {{ trends.loans_trend.labels|json_encode|raw }},
+                    datasets: [{
+                        label: 'Nouvelles Demandes',
+                        data: {{ trends.loans_trend.new_applications|json_encode|raw }},
+                        borderColor: 'rgb(78, 115, 223)',
+                        backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Prêts Approuvés',
+                        data: {{ trends.loans_trend.approved|json_encode|raw }},
+                        borderColor: 'rgb(28, 200, 138)',
+                        backgroundColor: 'rgba(28, 200, 138, 0.05)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            charts.revenue = new Chart(revenueCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Intérêts', 'Frais de Dossier', 'Pénalités', 'Autres'],
+                    datasets: [{
+                        data: [65, 20, 10, 5],
+                        backgroundColor: [
+                            'rgb(78, 115, 223)',
+                            'rgb(28, 200, 138)',
+                            'rgb(246, 194, 62)',
+                            'rgb(231, 74, 59)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+
+            // Conversion Funnel Chart
+            const conversionCtx = document.getElementById('conversionFunnelChart').getContext('2d');
+            charts.conversion = new Chart(conversionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Visiteurs', 'Inscriptions', 'Demandes', 'Approuvés', 'Actifs'],
+                    datasets: [{
+                        label: 'Conversion',
+                        data: [1000, 150, 75, 60, 55],
+                        backgroundColor: [
+                            'rgba(78, 115, 223, 0.8)',
+                            'rgba(28, 200, 138, 0.8)',
+                            'rgba(246, 194, 62, 0.8)',
+                            'rgba(231, 74, 59, 0.8)',
+                            'rgba(54, 185, 204, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(78, 115, 223)',
+                            'rgb(28, 200, 138)',
+                            'rgb(246, 194, 62)',
+                            'rgb(231, 74, 59)',
+                            'rgb(54, 185, 204)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Risk Distribution Chart
+            const riskCtx = document.getElementById('riskDistributionChart').getContext('2d');
+            charts.risk = new Chart(riskCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Faible Risque', 'Risque Modéré', 'Risque Élevé', 'Très Haut Risque'],
+                    datasets: [{
+                        data: [45, 35, 15, 5],
+                        backgroundColor: [
+                            'rgba(28, 200, 138, 0.7)',
+                            'rgba(246, 194, 62, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(231, 74, 59, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(28, 200, 138)',
+                            'rgb(246, 194, 62)',
+                            'rgb(255, 159, 64)',
+                            'rgb(231, 74, 59)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Real-time updates
+        function initializeRealTimeUpdates() {
+            updateRealTimeMetrics();
+            setInterval(updateRealTimeMetrics, 30000); // Update every 30 seconds
+        }
+
+        function updateRealTimeMetrics() {
+            fetch('{{ path('api_analytics_realtime') }}')
+                .then(response => response.json())
+                .then(data => {
+                    // Update KPI values
+                    document.getElementById('totalLoans').textContent = data.total_loans?.toLocaleString() || '0';
+                    document.getElementById('activeLoans').textContent = data.active_loans?.toLocaleString() || '0';
+                    document.getElementById('monthlyRevenue').textContent = (data.monthly_revenue?.toLocaleString() || '0') + ' €';
+                    document.getElementById('approvalRate').textContent = (data.approval_rate || '0') + '%';
+                    
+                    // Update active users
+                    document.getElementById('activeUsers').textContent = data.active_users_now || '0';
+                    
+                    // Update last update time
+                    document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString();
+                })
+                .catch(error => console.error('Error updating real-time metrics:', error));
+        }
+
+        // Chart update functionality
+        function updateChart() {
+            const period = document.getElementById('chartPeriod').value;
+            
+            fetch(`{{ path('api_analytics_chart_data', {type: 'loans-trend'}) }}?period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    charts.loansTrend.data.labels = data.labels;
+                    charts.loansTrend.data.datasets[0].data = data.new_applications;
+                    charts.loansTrend.data.datasets[1].data = data.approved;
+                    charts.loansTrend.update();
+                })
+                .catch(error => console.error('Error updating chart:', error));
+        }
+
+        // Refresh all data
+        document.getElementById('refreshData').addEventListener('click', function() {
+            const button = this;
+            const icon = button.querySelector('i');
+            
+            icon.classList.add('fa-spin');
+            button.disabled = true;
+            
+            updateRealTimeMetrics();
+            updateChart();
+            
+            setTimeout(() => {
+                icon.classList.remove('fa-spin');
+                button.disabled = false;
+                
+                // Show success notification
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                alert.style.top = '20px';
+                alert.style.right = '20px';
+                alert.style.zIndex = '9999';
+                alert.innerHTML = `
+                    <i class="fas fa-check me-2"></i>Données mises à jour avec succès
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                setTimeout(() => alert.remove(), 3000);
+            }, 1000);
+        });
+
+        // Export functionality
+        function initializeExportFunctionality() {
+            window.exportReport = function(format) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `{{ path('analytics_export', {format: '__FORMAT__'}) }}`.replace('__FORMAT__', format);
+                
+                const reportType = document.createElement('input');
+                reportType.type = 'hidden';
+                reportType.name = 'report_type';
+                reportType.value = 'analytics';
+                
+                const dateRange = document.createElement('input');
+                dateRange.type = 'hidden';
+                dateRange.name = 'date_range';
+                dateRange.value = document.getElementById('chartPeriod').value + '_days';
+                
+                form.appendChild(reportType);
+                form.appendChild(dateRange);
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+            };
+        }
+
+        // Auto-refresh charts based on real-time data
+        setInterval(() => {
+            fetch('{{ path('api_analytics_chart_data', {type: 'loans-trend'}) }}?period=' + document.getElementById('chartPeriod').value)
+                .then(response => response.json())
+                .then(data => {
+                    // Only update if data has changed
+                    if (JSON.stringify(charts.loansTrend.data.datasets[0].data) !== JSON.stringify(data.new_applications)) {
+                        charts.loansTrend.data.labels = data.labels;
+                        charts.loansTrend.data.datasets[0].data = data.new_applications;
+                        charts.loansTrend.data.datasets[1].data = data.approved;
+                        charts.loansTrend.update('none'); // No animation for real-time updates
+                    }
+                })
+                .catch(error => console.error('Error updating charts:', error));
+        }, 60000); // Update charts every minute
+    </script>
+{% endblock %}

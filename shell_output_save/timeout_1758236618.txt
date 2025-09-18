@@ -1,0 +1,60 @@
+[2025-09-19 07:01:43] 🚀 Démarrage du déploiement de LoanPro...
+🤔 Confirmer le déploiement en production ? (y/N): [2025-09-19 07:01:43] 🔍 Vérification des prérequis...
+[SUCCESS] Prérequis validés
+[2025-09-19 07:01:43] 🔧 Préparation de l'application...
+[2025-09-19 07:02:02] 📦 Installation des dépendances...
+Installing dependencies from lock file
+Verifying lock file contents can be installed on current platform.
+Package operations: 0 installs, 0 updates, 36 removals
+  - Removing theseer/tokenizer (1.2.3)
+  - Removing symfony/web-profiler-bundle (v7.3.3)
+  - Removing symfony/maker-bundle (v1.64.0)
+  - Removing symfony/dom-crawler (v7.3.3)
+  - Removing symfony/debug-bundle (v7.3.0)
+  - Removing symfony/css-selector (v7.3.0)
+  - Removing symfony/browser-kit (v7.3.2)
+  - Removing staabm/side-effects-detector (1.0.5)
+  - Removing sebastian/version (5.0.2)
+  - Removing sebastian/type (5.1.3)
+  - Removing sebastian/recursion-context (6.0.3)
+  - Removing sebastian/object-reflector (4.0.1)
+  - Removing sebastian/object-enumerator (6.0.1)
+  - Removing sebastian/lines-of-code (3.0.1)
+  - Removing sebastian/global-state (7.0.2)
+  - Removing sebastian/exporter (6.3.0)
+  - Removing sebastian/environment (7.2.1)
+  - Removing sebastian/diff (6.0.2)
+  - Removing sebastian/complexity (4.0.1)
+  - Removing sebastian/comparator (6.3.2)
+  - Removing sebastian/code-unit-reverse-lookup (4.0.1)
+  - Removing sebastian/code-unit (3.0.3)
+  - Removing sebastian/cli-parser (3.0.2)
+  - Removing phpunit/phpunit (11.5.39)
+  - Removing phpunit/php-timer (7.0.1)
+  - Removing phpunit/php-text-template (4.0.1)
+  - Removing phpunit/php-invoker (5.0.1)
+  - Removing phpunit/php-file-iterator (5.1.0)
+  - Removing phpunit/php-code-coverage (11.0.11)
+  - Removing phar-io/version (3.2.1)
+  - Removing phar-io/manifest (2.0.4)
+  - Removing nikic/php-parser (v5.6.1)
+  - Removing myclabs/deep-copy (1.13.4)
+  - Removing masterminds/html5 (2.10.0)
+  - Removing doctrine/doctrine-fixtures-bundle (4.1.0)
+  - Removing doctrine/data-fixtures (2.1.0)
+Generating optimized autoload files
+85 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+
+Run composer recipes at any time to see the status of your Symfony recipes.
+
+Executing script cache:clear [OK]
+Executing script assets:install public [OK]
+
+[SUCCESS] Application préparée
+[2025-09-19 07:02:14] 📦 Création du package de déploiement...
+[SUCCESS] Package créé: loanpro-deployment.tar.gz
+[2025-09-19 07:02:19] 🚀 Déploiement via FTP...
+  open `loanpro.achatrembourse.online' [Resolving host address...]                                                                  cd `public_html' [Connecting...]cd `public_html' [Sending commands...]                                        Getting directory contents (0) [Waiting for response...]                                                          rm `extract.sh' [Waiting for response...]                                           `loanpro-deployment.tar.gz' at 0 (0%) [Waiting for response...]`loanpro-deployment.tar.gz' at 1686128 (13%) [Sending data]                                                                   `/dev/stdin' at 0 [Waiting for response...]                                             put: /tmp/tmp.Q1cVDJ6YM6/<<EOD: No such file or directory
+Unknown command `tar'.
+rm `loanpro-deployment.tar.gz' [Waiting for response...]                                                          chmod `public/' [Connection idle]chmod `app.css' [Connection idle]  chmod `documents' [Connection idle]chmod `images' [Waiting for response...]chmod `profiles' [Waiting for response...]                                            chmod `var/' [Connection idle]chmod `dev' [Connection idle]   chmod `App_KernelDevDebugContainer.php.lock' [Waiting for response...]chmod `App_KernelDevDebugContainer.php' [Connection idle]               chmod `getAdminContextResolverService.php' [Waiting for response...]chmod `getAdminLoanControllerrequestDocumentsService.php' [Waiting for responsechmod `getAssociationConfiguratorService.php' [Waiting for response...]        chmod `getAuditLogCrudControllercreateEditFormService.php' [Waiting for responschmod `getAuditLogCrudControllerpersistEntityService.php' [Waiting for responsechmod `getCache_AppService.php' [Waiting for response...]                      chmod `getClientDashboardControllerapiLoanProgressService.php' [Waiting for reschmod `getConsole_CommandLoaderService.php' [Waiting for response...]          chmod `getConsole_Command_ConfigDebugService.php' [Waiting for response...]chmod `getConsole_Command_MessengerConsumeMessagesService.php' [Waiting for reschmod `getConsole_Command_SecretsDecryptToLocalService.php' [Waiting for responchmod `getConsole_Command_TranslationLintService.php' [Waiting for response...]chmod `getContainer_GetenvService.php' [Waiting for response...]               chmod `getDebug_DumpListenerService.php' [Waiting for response...]chmod `getDoctrineMigrations_ExecuteCommandService.php' [Waiting for response..chmod `getDoctrine_CacheClearMetadataCommandService.php' [Waiting for response.chmod `getDoctrine_Migrations_DependencyFactoryService.php' [Waiting for responchmod `getDoctrine_Orm_Messenger_EventSubscriber_DoctrineClearEntityManagerServchmod `getDoctrine_UuidGeneratorService.php' [Waiting for response...]         chmod `getFieldProviderService.php' [Waiting for response...]           chmod `getForm_Listener_PasswordHasherService.php' [Waiting for response...]chmod `getForm_TypeGuesser_DoctrineService.php' [Waiting for response...]     chmod `getIconService.php' [Waiting for response...]                       chmod `getLanguageControllersetDefaultService.php' [Waiting for response...]chmod `getLoanCrudControllerapproveService.php' [Waiting for response...]     chmod `getLoanCrudControllercreateIndexQueryBuilderService.php' [Waiting for rechmod `getLoanCrudControllerrejectService.php' [Waiting for response...]       chmod `getMailer_TransportFactory_SendmailService.php' [Waiting for response...chmod `getMaker_AutoCommand_MakeCrudService.php' [Waiting for response...]     chmod `getMaker_AutoCommand_MakeResetPasswordService.php' [Waiting for responsechmod `getMaker_AutoCommand_MakeUserService.php' [Waiting for response...]     chmod `getManagerRegistryAwareConnectionProviderService.php' [Waiting for respochmod `getMediaCrudControllerconfigureAssetsService.php' [Waiting for response.chmod `getMediaCrudControllerdeleteService.php' [Waiting for response...]      chmod `getMediaRepositoryService.php' [Waiting for response...]            chmod `getMessenger_Retry_MultiplierRetryStrategy_AsyncService.php' [Waiting fochmod `getMoneyConfiguratorService.php' [Waiting for response...]              chmod `getNotificationCrudControllerconfigureAssetsService.php' [Waiting for rechmod `getNotificationCrudControllerdeleteService.php' [Waiting for response...chmod `getNotificationCrudControllerviewDetailsService.php' [Waiting for responchmod `getPropertyInfo_SerializerExtractorService.php' [Waiting for response...chmod `getSecurityVoterService.php' [Waiting for response...]                  chmod `getSecurity_Listener_CheckAuthenticatorCredentialsService.php' [Waitingchmod `getSecurity_Logout_Listener_Default_MainService.php' [Waiting for responchmod `getServiceController2Service.php' [Waiting for response...]             chmod `getServiceControllersearchService.php' [Waiting for response...]chmod `getServicesResetterService.php' [Waiting for response...]         chmod `getTranslationControllerService.php' [Waiting for response...]chmod `getTranslation_Loader_QtService.php' [Waiting for response...]  chmod `getTurbo_Twig_RuntimeService.php' [Waiting for response...]     chmod `getTwig_Runtime_SecurityCsrfService.php' [Waiting for response...]chmod `getUserCrudControllerconfigureAssetsService.php' [Waiting for response..chmod `getUserCrudControllerdeleteEntityService.php' [Waiting for response...] chmod `getUserRepositoryService.php' [Waiting for response...]                 chmod `getValidator_Mapping_CacheWarmerService.php' [Waiting for response...]chmod `getWebProfiler_Controller_RouterService.php' [Waiting for response...]  chmod `get_Console_Command_CachePoolInvalidateTags_LazyService.php' [Waiting fochmod `get_Console_Command_ErrorDumper_LazyService.php' [Waiting for response..chmod `get_Console_Command_MessengerStats_LazyService.php' [Waiting for responschmod `get_Console_Command_SecretsSet_LazyService.php' [Waiting for response...chmod `get_Debug_Security_Voter_Security_Access_AuthenticatedVoterService.php' chmod `get_Debug_ValueResolver_ArgumentResolver_RequestPayloadService.php' [Waichmod `get_DoctrineMigrations_DiffCommand_LazyService.php' [Waiting for responschmod `get_DoctrineMigrations_VersionCommand_LazyService.php' [Waiting for respchmod `get_Maker_AutoCommand_MakeListener_LazyService.php' [Waiting for responschmod `get_Maker_AutoCommand_MakeSerializerNormalizer_LazyService.php' [Waitingchmod `get_Messenger_HandlerDescriptor_Dkv9sRYService.php' [Waiting for responschmod `get_Security_Command_UserPasswordHash_LazyService.php' [Waiting for respchmod `get_ServiceLocator_IaSFwjDService.php' [Waiting for response...]        chmod `get_ServiceLocator_S7XyZDVService.php' [Waiting for response...]  chmod `get_Twig_Command_Lint_LazyService.php' [Waiting for response...]  chmod `Config' [Connection idle]                                         chmod `Doctrine' [Waiting for response...]chmod `ConnectionConfig' [Connection idle]  chmod `SlaveConfig.php' [Waiting for response...]chmod `ControllerResolverConfig.php' [Connection idle]chmod `DqlConfig.php' [Waiting for response...]         chmod `ListenerConfig' [Connection idle]         chmod `ListenerConfig.php' [Waiting for response...]chmod `SecondLevelCache' [Waiting for response...]    chmod `RegionConfig' [Waiting for response...]      

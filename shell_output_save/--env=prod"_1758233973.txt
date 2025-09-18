@@ -1,0 +1,44 @@
+> > > > > > > > 
+In ExceptionConverter.php line 129:
+                                                                               
+  An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied f  
+  or user 'root'@'localhost'                                                   
+                                                                               
+
+In Exception.php line 24:
+                                                                    
+  SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'  
+                                                                    
+
+In PDOConnect.php line 22:
+                                                                    
+  SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'  
+                                                                    
+
+
+ // Warming up the cache for the prod environment with debug false              
+
+{"message":"User Deprecated: Relying on a fallback connection used to determine the database platform while connecting to a non-existing database is deprecated. Either use an existing database name in connection parameters or omit the database name if the platform and the server configuration allow that. (Connection.php:464 called by Connection.php:416, https://github.com/doctrine/dbal/pull/5707, package doctrine/dbal)","context":{"exception":{"class":"ErrorException","message":"User Deprecated: Relying on a fallback connection used to determine the database platform while connecting to a non-existing database is deprecated. Either use an existing database name in connection parameters or omit the database name if the platform and the server configuration allow that. (Connection.php:464 called by Connection.php:416, https://github.com/doctrine/dbal/pull/5707, package doctrine/dbal)","code":0,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/doctrine/deprecations/src/Deprecation.php:208"}},"level":200,"level_name":"INFO","channel":"deprecation","datetime":"2025-09-18T22:19:33.136173+00:00","extra":{}}
+{"message":"User Deprecated: Relying on a fallback connection used to determine the database platform while connecting to a non-existing database is deprecated. Either use an existing database name in connection parameters or omit the database name if the platform and the server configuration allow that. (Connection.php:464 called by Connection.php:416, https://github.com/doctrine/dbal/pull/5707, package doctrine/dbal)","context":{"exception":{"class":"ErrorException","message":"User Deprecated: Relying on a fallback connection used to determine the database platform while connecting to a non-existing database is deprecated. Either use an existing database name in connection parameters or omit the database name if the platform and the server configuration allow that. (Connection.php:464 called by Connection.php:416, https://github.com/doctrine/dbal/pull/5707, package doctrine/dbal)","code":0,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/doctrine/deprecations/src/Deprecation.php:208"}},"level":200,"level_name":"INFO","channel":"deprecation","datetime":"2025-09-18T22:19:33.136173+00:00","extra":{}}
+{"message":"Error thrown while running command \"cache:warmup --env=prod\". Message: \"An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'\"","context":{"exception":{"class":"Doctrine\\DBAL\\Exception\\DriverException","message":"An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'","code":1698,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/doctrine/dbal/src/Driver/API/MySQL/ExceptionConverter.php:129","previous":{"class":"Doctrine\\DBAL\\Driver\\PDO\\Exception","message":"SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'","code":1698,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/doctrine/dbal/src/Driver/PDO/Exception.php:24","previous":{"class":"PDOException","message":"SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'","code":1698,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/doctrine/dbal/src/Driver/PDO/PDOConnect.php:22"}}},"command":"cache:warmup --env=prod","message":"An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'"},"level":500,"level_name":"CRITICAL","channel":"console","datetime":"2025-09-18T22:19:33.137240+00:00","extra":{}}
+22:19:33 CRITICAL  [console] Error thrown while running command "cache:warmup --env=prod". Message: "An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'" ["exception" => Doctrine\DBAL\Exception\DriverException { …},"command" => "cache:warmup --env=prod","message" => "An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'"]
+{"message":"Command \"cache:warmup --env=prod\" exited with code \"1698\"","context":{"command":"cache:warmup --env=prod","code":1698},"level":100,"level_name":"DEBUG","channel":"console","datetime":"2025-09-18T22:19:33.147817+00:00","extra":{}}
+
+In ExceptionConverter.php line 129:
+                                                                               
+  An exception occurred in the driver: SQLSTATE[HY000] [1698] Access denied f  
+  or user 'root'@'localhost'                                                   
+                                                                               
+
+In Exception.php line 24:
+                                                                    
+  SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'  
+                                                                    
+
+In PDOConnect.php line 22:
+                                                                    
+  SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost'  
+                                                                    
+
+cache:warmup [--no-optional-warmers]
+

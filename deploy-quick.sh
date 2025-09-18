@@ -88,6 +88,42 @@ EOF
     mkdir -p var/{cache,log,sessions}
     chmod -R 777 var/
     
+    # Créer le build directory et entrypoints.json pour Webpack Encore
+    mkdir -p public/build
+    cat > public/build/entrypoints.json << 'ENTRYPOINTS_EOF'
+{
+    "entrypoints": {
+        "app": {
+            "css": ["/build/app.css"],
+            "js": ["/build/app.js"]
+        }
+    }
+}
+ENTRYPOINTS_EOF
+
+    # Créer manifest.json pour Webpack Encore
+    cat > public/build/manifest.json << 'MANIFEST_EOF'
+{
+    "build/app.css": "/build/app.css",
+    "build/app.js": "/build/app.js"
+}
+MANIFEST_EOF
+
+    # Créer fichier CSS minimal
+    cat > public/build/app.css << 'CSS_EOF'
+/* CSS minimal pour LoanPro en attendant la compilation Webpack */
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+.btn { padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+.btn:hover { background: #0056b3; }
+CSS_EOF
+
+    # Créer fichier JS minimal
+    cat > public/build/app.js << 'JS_EOF'
+// JavaScript minimal pour LoanPro en attendant la compilation Webpack
+console.log('LoanPro application loaded');
+JS_EOF
+    
     # Créer .htaccess à la racine (pour redirection vers public/)
     cat > .htaccess << 'EOF'
 <IfModule mod_rewrite.c>

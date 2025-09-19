@@ -1,0 +1,60 @@
+🔧 Correction de l'erreur Media::$status sur le dashboard admin...
+📡 Connexion au serveur de production...
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Warning: Permanently added '46.202.129.197' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 22.04.5 LTS (GNU/Linux 5.15.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Sep 19 07:13:17 UTC 2025
+
+  System load:  0.0                Processes:             143
+  Usage of /:   15.5% of 96.73GB   Users logged in:       0
+  Memory usage: 38%                IPv4 address for eth0: 46.202.129.197
+  Swap usage:   0%                 IPv6 address for eth0: 2a02:4780:28:430c::1
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+259 updates can be applied immediately.
+118 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+13 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+New release '24.04.3 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+
+🧹 Nettoyage du cache Doctrine...
+🔄 Mise à jour du schéma de base de données...
+{"message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","context":{"exception":{"class":"ErrorException","message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","code":0,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/easycorp/easyadmin-bundle/src/Router/AdminRouteGenerator.php:509"}},"level":200,"level_name":"INFO","channel":"deprecation","datetime":"2025-09-19T07:13:19.487008+00:00","extra":{}}
+{"message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","context":{"exception":{"class":"ErrorException","message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","code":0,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/easycorp/easyadmin-bundle/src/Router/AdminRouteGenerator.php:509"}},"level":200,"level_name":"INFO","channel":"deprecation","datetime":"2025-09-19T07:13:19.487436+00:00","extra":{}}
+ Updating database schema...
+
+     13 queries were executed
+
+ [OK] Database schema updated successfully!                                     
+
+♻️ Régénération du cache de production...
+
+ // Clearing the cache for the prod environment with debug false                
+
+{"message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","context":{"exception":{"class":"ErrorException","message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","code":0,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/easycorp/easyadmin-bundle/src/Router/AdminRouteGenerator.php:509"}},"level":200,"level_name":"INFO","channel":"deprecation","datetime":"2025-09-19T07:13:20.271713+00:00","extra":{}}
+{"message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","context":{"exception":{"class":"ErrorException","message":"User Deprecated: Since easycorp/easyadmin-bundle 4.24.0: The \"App\\Controller\\Admin\\DashboardController\" dashboard controller does not apply the #[AdminDashboard] attribute. Applying this attribute is the recommended way to define the route path and route name of the dashboard, instead of using the default #[Route] attribute from Symfony (e.g. #[AdminDashboard(routePath: '/admin', routeName: 'admin')]). Not applying the #[AdminDashboard] attribute is deprecated because it will be mandatory in EasyAdmin 5.0.0.","code":0,"file":"/home/mrjoker/web/loanpro.achatrembourse.online/public_html/vendor/easycorp/easyadmin-bundle/src/Router/AdminRouteGenerator.php:509"}},"level":200,"level_name":"INFO","channel":"deprecation","datetime":"2025-09-19T07:13:20.275019+00:00","extra":{}}
+ [OK] Cache for the "prod" environment (debug=false) was successfully cleared.  
+
+
+ // Warming up the cache for the prod environment with debug false              
+
+ [OK] Cache for the "prod" environment (debug=false) was successfully warmed.   
+
+✅ Correction terminée !
+✅ Correction réussie ! Le dashboard admin devrait maintenant fonctionner.
+🌐 Testez l'accès: https://loanpro.achatrembourse.online/admin/

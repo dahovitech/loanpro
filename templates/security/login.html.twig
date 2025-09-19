@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'login.title'|trans }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="text-primary">
+                            <i class="fas fa-user-circle me-2"></i>LoanPro
+                        </h2>
+                        <h4>{{ 'login.title'|trans }}</h4>
+                        <p class="text-muted">{{ 'login.subtitle'|trans }}</p>
+                    </div>
+
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% if app.user %}
+                            <div class="mb-3">
+                                Vous êtes connecté en tant que {{ app.user.useridentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">{{ 'login.email'|trans }}</label>
+                            <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control" autocomplete="email" required autofocus>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{ 'login.password'|trans }}</label>
+                            <input type="password" name="password" id="password" class="form-control" autocomplete="current-password" required>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="_remember_me" class="form-check-input" id="remember_me">
+                            <label class="form-check-label" for="remember_me">
+                                {{ 'login.remember_me'|trans }}
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="d-grid mb-3">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-sign-in-alt me-2"></i>{{ 'login.submit'|trans }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <a href="{{ path('app_password_forgot') }}" class="text-decoration-none">
+                            <i class="fas fa-key me-1"></i>
+                            {{ 'login.forgot_password'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-dismiss alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert) {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            });
+        });
+    </script>
+{% endblock %}

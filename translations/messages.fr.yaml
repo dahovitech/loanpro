@@ -171,3 +171,67 @@ footer:
   contact: "Contact"
   links: "Liens utiles"
   rights: "Tous droits réservés"
+
+# Login
+login:
+  title: "Connexion"
+  subtitle: "Accédez à votre espace personnel"
+  email: "Adresse e-mail"
+  password: "Mot de passe"
+  remember_me: "Se souvenir de moi"
+  submit: "Se connecter"
+  forgot_password: "Mot de passe oublié ?"
+
+# Password Reset
+password_reset:
+  request:
+    title: "Mot de passe oublié"
+    description: "Saisissez votre adresse e-mail pour recevoir un lien de réinitialisation"
+    success: "Si cette adresse e-mail existe dans notre base, vous recevrez un lien de réinitialisation"
+    error: "Une erreur s'est produite. Veuillez réessayer plus tard"
+  title: "Réinitialiser le mot de passe"
+  description: "Bonjour %user_name%, veuillez saisir votre nouveau mot de passe"
+  success: "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter"
+  error: "Une erreur s'est produite lors de la réinitialisation"
+  expires_at: "Ce lien expire le %date% à %time%"
+  back_to_login: "Retour à la connexion"
+  password_requirements: "Le mot de passe doit contenir"
+  password_min_8: "Au moins 8 caractères"
+  password_uppercase: "Au moins une majuscule"
+  password_lowercase: "Au moins une minuscule"
+  password_number: "Au moins un chiffre"
+  token:
+    invalid: "Ce lien de réinitialisation n'est pas valide ou a déjà été utilisé"
+    expired: "Ce lien de réinitialisation a expiré. Veuillez en demander un nouveau"
+  form:
+    email:
+      label: "Adresse e-mail"
+      placeholder: "votre@email.com"
+      required: "L'adresse e-mail est obligatoire"
+      invalid: "Veuillez saisir une adresse e-mail valide"
+    new_password:
+      label: "Nouveau mot de passe"
+      placeholder: "Saisissez votre nouveau mot de passe"
+    confirm_password:
+      label: "Confirmer le mot de passe"
+      placeholder: "Confirmez votre nouveau mot de passe"
+    password:
+      required: "Le mot de passe est obligatoire"
+      min_length: "Le mot de passe doit contenir au moins 8 caractères"
+      max_length: "Le mot de passe ne peut pas dépasser 255 caractères"
+      strength: "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre"
+      mismatch: "Les mots de passe ne correspondent pas"
+    submit: "Envoyer le lien"
+    reset_password: "Réinitialiser le mot de passe"
+  email:
+    subject: "Réinitialisation de votre mot de passe"
+    title: "Réinitialisation de mot de passe"
+    greeting: "Bonjour %name%"
+    message: "Vous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour procéder à la réinitialisation."
+    button: "Réinitialiser mon mot de passe"
+    link_info: "Si le bouton ne fonctionne pas, vous pouvez copier et coller ce lien dans votre navigateur"
+    security_notice: "Informations de sécurité"
+    expires_info: "Ce lien expire le %date% à %time%"
+    not_requested: "Si vous n'avez pas demandé cette réinitialisation, vous pouvez ignorer cet e-mail"
+    footer: "Cet e-mail a été envoyé automatiquement, merci de ne pas y répondre"
+    automated: "Ce message a été généré automatiquement"

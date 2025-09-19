@@ -31,6 +31,16 @@ _security_routes:
     defaults:
         _locale: fr
 
+# Password reset routes with locale prefix
+_password_reset_routes:
+    resource: ../src/Controller/PasswordResetController.php
+    type: attribute
+    prefix: /{_locale}
+    requirements:
+        _locale: fr|en|es|de
+    defaults:
+        _locale: fr
+
 # Registration routes with locale prefix
 _registration_routes:
     resource: ../src/Controller/RegistrationController.php

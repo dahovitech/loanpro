@@ -1,0 +1,53 @@
+# Password Reset
+password_reset:
+  request:
+    title: "Contraseña olvidada"
+    description: "Introduce tu dirección de correo electrónico para recibir un enlace de restablecimiento"
+    success: "Si esta dirección de correo electrónico existe en nuestro sistema, recibirás un enlace de restablecimiento"
+    error: "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde"
+  title: "Restablecer contraseña"
+  description: "Hola %user_name%, por favor introduce tu nueva contraseña"
+  success: "Tu contraseña ha sido restablecida exitosamente. Ahora puedes iniciar sesión"
+  error: "Ha ocurrido un error durante el restablecimiento de la contraseña"
+  expires_at: "Este enlace expira el %date% a las %time%"
+  back_to_login: "Volver al inicio de sesión"
+  password_requirements: "La contraseña debe contener"
+  password_min_8: "Al menos 8 caracteres"
+  password_uppercase: "Al menos una letra mayúscula"
+  password_lowercase: "Al menos una letra minúscula"
+  password_number: "Al menos un número"
+  token:
+    invalid: "Este enlace de restablecimiento no es válido o ya ha sido utilizado"
+    expired: "Este enlace de restablecimiento ha expirado. Por favor, solicita uno nuevo"
+  form:
+    email:
+      label: "Dirección de correo electrónico"
+      placeholder: "tu@email.com"
+      required: "La dirección de correo electrónico es obligatoria"
+      invalid: "Por favor, introduce una dirección de correo electrónico válida"
+    new_password:
+      label: "Nueva contraseña"
+      placeholder: "Introduce tu nueva contraseña"
+    confirm_password:
+      label: "Confirmar contraseña"
+      placeholder: "Confirma tu nueva contraseña"
+    password:
+      required: "La contraseña es obligatoria"
+      min_length: "La contraseña debe tener al menos 8 caracteres"
+      max_length: "La contraseña no puede exceder 255 caracteres"
+      strength: "La contraseña debe contener al menos una letra mayúscula, una minúscula y un número"
+      mismatch: "Las contraseñas no coinciden"
+    submit: "Enviar enlace de restablecimiento"
+    reset_password: "Restablecer contraseña"
+  email:
+    subject: "Restablece tu contraseña"
+    title: "Restablecimiento de contraseña"
+    greeting: "Hola %name%"
+    message: "Has solicitado un restablecimiento de contraseña. Haz clic en el botón de abajo para proceder con el restablecimiento."
+    button: "Restablecer mi contraseña"
+    link_info: "Si el botón no funciona, puedes copiar y pegar este enlace en tu navegador"
+    security_notice: "Información de seguridad"
+    expires_info: "Este enlace expira el %date% a las %time%"
+    not_requested: "Si no solicitaste este restablecimiento, puedes ignorar este correo electrónico"
+    footer: "Este correo electrónico fue enviado automáticamente, por favor no respondas"
+    automated: "Este mensaje fue generado automáticamente"

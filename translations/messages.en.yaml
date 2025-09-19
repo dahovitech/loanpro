@@ -171,3 +171,67 @@ footer:
   contact: "Contact"
   links: "Useful links"
   rights: "All rights reserved"
+
+# Login
+login:
+  title: "Login"
+  subtitle: "Access your personal space"
+  email: "Email address"
+  password: "Password"
+  remember_me: "Remember me"
+  submit: "Sign in"
+  forgot_password: "Forgot password?"
+
+# Password Reset
+password_reset:
+  request:
+    title: "Forgot Password"
+    description: "Enter your email address to receive a password reset link"
+    success: "If this email address exists in our system, you will receive a reset link"
+    error: "An error occurred. Please try again later"
+  title: "Reset Password"
+  description: "Hello %user_name%, please enter your new password"
+  success: "Your password has been successfully reset. You can now log in"
+  error: "An error occurred during password reset"
+  expires_at: "This link expires on %date% at %time%"
+  back_to_login: "Back to login"
+  password_requirements: "Password must contain"
+  password_min_8: "At least 8 characters"
+  password_uppercase: "At least one uppercase letter"
+  password_lowercase: "At least one lowercase letter"
+  password_number: "At least one number"
+  token:
+    invalid: "This reset link is invalid or has already been used"
+    expired: "This reset link has expired. Please request a new one"
+  form:
+    email:
+      label: "Email address"
+      placeholder: "your@email.com"
+      required: "Email address is required"
+      invalid: "Please enter a valid email address"
+    new_password:
+      label: "New password"
+      placeholder: "Enter your new password"
+    confirm_password:
+      label: "Confirm password"
+      placeholder: "Confirm your new password"
+    password:
+      required: "Password is required"
+      min_length: "Password must be at least 8 characters long"
+      max_length: "Password cannot exceed 255 characters"
+      strength: "Password must contain at least one uppercase letter, one lowercase letter and one number"
+      mismatch: "Passwords do not match"
+    submit: "Send reset link"
+    reset_password: "Reset password"
+  email:
+    subject: "Reset your password"
+    title: "Password Reset"
+    greeting: "Hello %name%"
+    message: "You have requested a password reset. Click the button below to proceed with the reset."
+    button: "Reset my password"
+    link_info: "If the button doesn't work, you can copy and paste this link into your browser"
+    security_notice: "Security information"
+    expires_info: "This link expires on %date% at %time%"
+    not_requested: "If you did not request this reset, you can ignore this email"
+    footer: "This email was sent automatically, please do not reply"
+    automated: "This message was generated automatically"

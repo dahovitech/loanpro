@@ -1,0 +1,240 @@
+# Verwaltungsoberfläche - Deutsch
+navigation:
+  dashboard: Dashboard
+  languages: Sprachen
+  services: Dienste
+  translations: Übersetzungen
+  settings: Einstellungen
+  logout: Abmelden
+
+dashboard:
+  title: Dashboard
+  welcome: Willkommen in der Oragon-Verwaltung
+  statistics: Statistiken
+  recent_activity: Letzte Aktivitäten
+  quick_actions: Schnellaktionen
+  total_services: Gesamte Dienste
+  active_services: Aktive Dienste
+  total_languages: Konfigurierte Sprachen
+  translation_progress: Übersetzungsfortschritt
+  no_services: Keine Dienste konfiguriert
+  create_first_service: Ersten Dienst erstellen
+  manage_languages: Sprachen verwalten
+  languages_count: Sprachen
+  translations_count: Übersetzungen
+  completion: Vollständigkeit
+  recent_services: Aktuelle Dienste
+  view_all: Alle anzeigen
+  configured_languages: Konfigurierte Sprachen
+  manage: Verwalten
+  no_service: Kein Service
+  create_first_service_text: Beginnen Sie mit der Erstellung Ihres ersten Dienstes.
+  no_language_configured: Keine Sprachen konfiguriert
+  add_language: Sprache hinzufügen
+  updated: Aktualisiert
+  slug: Slug
+  status: Status
+
+languages:
+  title: Sprachenverwaltung
+  list_title: Sprachenliste
+  new_title: Neue Sprache
+  edit_title: Sprache bearbeiten
+  show_title: Sprachendetails
+  fields:
+    name: Name
+    code: Code
+    native_name: Nativer Name
+    default: Standard
+    active: Aktiv
+    created_at: Erstellt am
+    updated_at: Aktualisiert am
+  actions:
+    new: Neue Sprache
+    edit: Bearbeiten
+    delete: Löschen
+    show: Details anzeigen
+    set_default: Als Standard festlegen
+    activate: Aktivieren
+    deactivate: Deaktivieren
+    back_to_list: Zurück zur Liste
+  messages:
+    created: Sprache erfolgreich erstellt
+    updated: Sprache erfolgreich aktualisiert
+    deleted: Sprache erfolgreich gelöscht
+    set_as_default: Sprache als Standard festgelegt
+    activated: Sprache aktiviert
+    deactivated: Sprache deaktiviert
+    confirm_delete: Sind Sie sicher, dass Sie diese Sprache löschen möchten?
+    no_languages: Keine Sprachen konfiguriert
+    create_first: Erste Sprache erstellen
+  help:
+    code: "ISO-Sprachcode (z.B.: fr, en, es)"
+    native_name: Sprachname in der nativen Sprache
+    default: Nur eine Sprache kann als Standard festgelegt werden
+    active: Inaktive Sprachen sind auf der Website nicht verfügbar
+
+services:
+  title: Diensteverwaltung
+  list_title: Diensteliste
+  new_title: Neuer Dienst
+  edit_title: Dienst bearbeiten
+  show_title: Dienstdetails
+  fields:
+    title: Titel
+    slug: Slug
+    description: Beschreibung
+    detail: Detail
+    is_active: Aktiv
+    sort_order: Anzeigereihenfolge
+    created_at: Erstellt am
+    updated_at: Aktualisiert am
+    translations: Übersetzungen
+  actions:
+    new: Neuer Dienst
+    edit: Bearbeiten
+    delete: Löschen
+    show: Details anzeigen
+    duplicate: Duplizieren
+    back_to_list: Zurück zur Liste
+    create_service: Dienst erstellen
+    actions: Aktionen
+    update_service: Dienst aktualisieren
+    cancel: Abbrechen
+  messages:
+    created: Dienst erfolgreich erstellt
+    updated: Dienst erfolgreich aktualisiert
+    deleted: Dienst erfolgreich gelöscht
+    confirm_delete: Sind Sie sicher, dass Sie diesen Dienst löschen möchten?
+    no_services: Keine Dienste konfiguriert
+    create_first: Ersten Dienst erstellen
+  help:
+    slug: Eindeutige Kennung für URL (automatisch generiert, wenn leer)
+    sort_order: Dienst-Anzeigereihenfolge (kleiner = zuerst angezeigt)
+    is_active: Deaktivieren Sie dies, um den Dienst zu deaktivieren
+    fill_default: Füllen Sie mindestens die Standardsprache aus
+    empty_fallback: Leere Felder verwenden die Standardübersetzung
+  tabs:
+    configuration: Dienstkonfiguration
+    translations: Übersetzungen
+    tips: Tipps
+  translation_status:
+    translated: Übersetzt
+    not_translated: Nicht übersetzt
+    default_language: Standardsprache
+    auto_generated: Der Slug wird automatisch aus dem ersten eingegebenen Titel generiert
+    hide_public: Sie können den Dienst deaktivieren, um ihn vor der Öffentlichkeit zu verbergen
+
+translations:
+  title: Übersetzungsverwaltung
+  list_title: Übersetzungsdateien
+  edit_title: Übersetzungen bearbeiten
+  domain: Domain
+  locale: Sprache
+  file: Datei
+  keys: Schlüssel
+  actions:
+    edit: Bearbeiten
+    refresh: Aktualisieren
+    export: Exportieren
+    import: Importieren
+  messages:
+    updated: Übersetzungen erfolgreich aktualisiert
+    exported: Übersetzungen erfolgreich exportiert
+    imported: Übersetzungen erfolgreich importiert
+  help:
+    domain_info: Domains ermöglichen die Organisation von Übersetzungen nach Bereichen
+    key_format: "Verwenden Sie Punkt-Notation für Schlüssel (z.B.: menu.home)"
+    fallback: Wenn eine Übersetzung fehlt, wird die Standardsprache verwendet
+
+language:
+  change_interface: Oberflächensprache ändern
+  switch_error: Fehler beim Sprachwechsel
+
+forms:
+  language:
+    code:
+      label: Sprachcode
+      help: "ISO-Sprachcode (z.B.: fr, en, es, de)"
+      placeholder: de
+    name:
+      label: Sprachname
+      help: Sprachname auf Deutsch
+      placeholder: Deutsch
+    native_name:
+      label: Nativer Name
+      help: Sprachname in der Muttersprache
+      placeholder: Deutsch
+    is_active:
+      label: Aktive Sprache
+      help: Deaktivieren Sie diese Sprache
+    is_default:
+      label: Standardsprache
+      help: Aktivieren Sie diese Sprache als Standard
+    sort_order:
+      label: Anzeigereihenfolge
+      help: "Anzeigereihenfolge der Sprachen (kleiner = zuerst angezeigt)"
+  service:
+    slug:
+      label: Slug
+      help: "Eindeutige Kennung für URL (automatisch generiert, wenn leer)"
+      placeholder: mein-service
+    is_active:
+      label: Aktiver Service
+      help: Deaktivieren Sie diesen Service
+    sort_order:
+      label: Anzeigereihenfolge
+      help: "Anzeigereihenfolge der Services (kleiner = zuerst angezeigt)"
+  service_translation:
+    title:
+      label: Titel
+      placeholder: Service-Titel
+    description:
+      label: Beschreibung
+      placeholder: Kurze Service-Beschreibung
+    detail:
+      label: Details
+      placeholder: Detaillierte Service-Beschreibung
+    language:
+      label: Sprache
+      placeholder: Sprache auswählen
+
+common:
+  actions:
+    save: Speichern
+    cancel: Abbrechen
+    delete: Löschen
+    edit: Bearbeiten
+    view: Anzeigen
+    back: Zurück
+    close: Schließen
+    confirm: Bestätigen
+    yes: Ja
+    no: Nein
+  status:
+    active: Aktiv
+    inactive: Inaktiv
+    enabled: Aktiviert
+    disabled: Deaktiviert
+    published: Veröffentlicht
+    draft: Entwurf
+  messages:
+    success: Operation erfolgreich abgeschlossen
+    error: Ein Fehler ist aufgetreten
+    confirm_action: Sind Sie sicher, dass Sie diese Aktion ausführen möchten?
+    no_results: Keine Ergebnisse gefunden
+    loading: Lädt...
+  form:
+    required: Dieses Feld ist erforderlich
+    invalid: Dieses Feld ist nicht gültig
+    too_short: Dieses Feld ist zu kurz
+    too_long: Dieses Feld ist zu lang
+    invalid_email: Ungültige E-Mail-Adresse
+    invalid_url: Ungültige URL
+  time:
+    just_now: Gerade eben
+    minutes_ago: 'Vor %count% Minuten'
+    hours_ago: 'Vor %count% Stunden'
+    days_ago: 'Vor %count% Tagen'
+    weeks_ago: 'Vor %count% Wochen'
+    months_ago: 'Vor %count% Monaten'

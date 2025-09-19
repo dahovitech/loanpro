@@ -1,0 +1,173 @@
+# Navigation
+nav:
+  home: "Home"
+  apply: "Apply for Loan"
+  calculator: "Calculator"
+  about: "About"
+  contact: "Contact"
+
+# Home page
+home:
+  title: "Home"
+  hero:
+    title: "Achieve your projects with our personalized loans"
+    subtitle: "Fast, secure and tailored financing solutions for your needs"
+    apply_now: "Apply now"
+    calculate: "Calculate my loan"
+  
+  features:
+    title: "Why choose us?"
+    subtitle: "Advantages that make the difference"
+    fast:
+      title: "Quick response"
+      description: "Get an answer in less than 24h"
+    secure:
+      title: "100% secure"
+      description: "Your data is protected and confidential"
+    rates:
+      title: "Competitive rates"
+      description: "The best rates in the market"
+  
+  loan_types:
+    title: "Available loan types"
+    subtitle: "Choose the loan adapted to your project"
+    real_estate: "Real Estate"
+    real_estate_desc: "To buy your main residence or invest"
+    vehicle: "Auto Loan"
+    vehicle_desc: "Finance the purchase of your new or used vehicle"
+    personal: "Personal"
+    personal_desc: "For all your personal projects"
+    business: "Business"
+    business_desc: "Develop your professional activity"
+  
+  cta:
+    title: "Ready to start?"
+    description: "Submit your application in just a few minutes"
+    button: "Start my application"
+  
+  stats:
+    clients: "Satisfied customers"
+    amount: "Loans granted"
+    rating: "Average rating"
+    response: "Response time"
+
+# Apply form
+apply:
+  title: "Loan application"
+  description: "Fill out this form to submit your loan application. All fields marked with * are required."
+  personal_info: "Personal information"
+  loan_info: "Loan details"
+  amount_range: "Amount between %min%€ and %max%€"
+  duration_range: "Duration between %min% and %max% months"
+  quick_calc: "Quick estimate"
+  fill_amount_duration: "Fill in the amount and duration to see the estimate"
+  monthly_payment: "Monthly payment"
+  total_amount: "Total amount"
+  interest_rate: "Interest rate"
+  terms_acceptance: "I accept the <a href='#'>terms and conditions</a> and <a href='#'>privacy policy</a>"
+  back: "Back"
+  submit: "Submit my application"
+
+# Loan status
+status:
+  title: "Your application status"
+  hello: "Hello"
+  reference: "Reference"
+  pending: "Pending"
+  approved: "Approved"
+  rejected: "Rejected"
+  processing: "Processing"
+  pending_message: "Your application is under review. We will contact you within 24h."
+  approved_message: "Congratulations! Your loan has been approved."
+  rejected_message: "We're sorry, your application could not be accepted."
+  processing_message: "Your file is being processed by our teams."
+  loan_details: "Loan details"
+  amount: "Amount"
+  duration: "Duration"
+  months: "months"
+  purpose: "Purpose"
+  date: "Application date"
+  approved_terms: "Approved terms"
+  monthly_payment: "Monthly payment"
+  total_amount: "Total amount"
+  need_help: "Need help?"
+  contact_message: "Our team is available to answer your questions."
+  notes: "Notes"
+  next_steps: "Next steps"
+  step1: "An advisor will contact you within the next 48h"
+  step2: "Preparation of contractual documents"
+  step3: "Signature and fund release"
+  back_home: "Back to home"
+  new_application: "New application"
+
+# Calculator
+calculator:
+  title: "Loan calculator"
+  description: "Calculate your monthly payments and the total cost of your loan"
+  parameters: "Loan parameters"
+  results: "Results"
+  amount: "Loan amount"
+  duration: "Loan duration"
+  months: "months"
+  interest_rate: "Interest rate"
+  amount_range: "Between %min%€ and %max%€"
+  duration_range: "Between %min% and %max% months"
+  rate_info: "Indicative rate, final rate depends on your profile"
+  monthly_payment: "Monthly payment"
+  total_amount: "Total amount"
+  total_interest: "Credit cost"
+  breakdown: "Breakdown"
+  principal: "Principal"
+  interest: "Interest"
+  apply_now: "Apply now"
+
+# Loan purposes
+purpose:
+  real_estate: "Real estate purchase"
+  renovation: "Renovation"
+  vehicle: "Vehicle purchase"
+  debt_consolidation: "Debt consolidation"
+  personal_project: "Personal project"
+  investment: "Investment"
+  other: "Other"
+
+# Admin
+admin:
+  cancel: "Cancel"
+  loans:
+    title: "Loan management"
+    filters: "Filters and search"
+    search: "Search"
+    search_placeholder: "Name, email, phone..."
+    search_btn: "Search"
+    status: "Status"
+    all_status: "All statuses"
+    list: "Application list"
+    no_loans: "No loan applications found"
+    applicant: "Applicant"
+    amount: "Amount"
+    duration: "Duration"
+    date: "Date"
+    actions: "Actions"
+    approve_loan: "Approve loan"
+    reject_loan: "Reject loan"
+    interest_rate: "Interest rate"
+    approve: "Approve"
+    reject: "Reject"
+    rejection_reason: "Rejection reason"
+    rejection_placeholder: "Explain why this application is rejected..."
+  
+  stats:
+    total: "Total applications"
+    pending: "Pending"
+    approved: "Approved"
+    total_amount: "Total amount granted"
+  
+  config:
+    title: "Site configuration"
+
+# Footer
+footer:
+  contact: "Contact"
+  links: "Useful links"
+  rights: "All rights reserved"

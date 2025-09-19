@@ -6,9 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\ServiceRepository;
-use App\Repository\LanguageRepository;
-use App\Repository\ServiceTranslationRepository;
 use App\Repository\LoanRepository;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,14 +20,18 @@ class AdminController extends AbstractController
     ) {}
 
     #[Route('/', name: 'dashboard')]
-    public function dashboard(
-        ServiceRepository $serviceRepository,
-        LanguageRepository $languageRepository,
-        ServiceTranslationRepository $translationRepository
-    ): Response {
-        $services = $serviceRepository->findForAdministration();
-        $languages = $languageRepository->getAllOrderedBySortOrder();
-        $stats = $translationRepository->getTranslationStats();
+    public function dashboard(): Response {
+        // Services temporairement désactivés car repositories manquants
+        // $services = $serviceRepository->findForAdministration();
+        // $languages = $languageRepository->getAllOrderedBySortOrder();
+        // $stats = $translationRepository->getTranslationStats();
+        $services = [];
+        $languages = [];
+        $stats = [
+            'total_keys' => 0,
+            'translated_keys' => 0,
+            'completion_percentage' => 0
+        ];
 
         // Nouvelles métriques avancées
         $loanMetrics = $this->getLoanMetrics();

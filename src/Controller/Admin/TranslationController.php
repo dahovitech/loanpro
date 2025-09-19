@@ -92,7 +92,7 @@ class TranslationController extends AbstractController
         $success = $this->translationManager->saveTranslations($domain, $locale, $nestedTranslations);
         
         if ($success) {
-            $this->addFlash('success', 'admin.translations.messages.updated');
+            $this->addFlash('success', 'translations.messages.updated');
             return new JsonResponse(['success' => true]);
         }
 

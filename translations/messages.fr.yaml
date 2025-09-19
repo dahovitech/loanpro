@@ -1,0 +1,173 @@
+# Navigation
+nav:
+  home: "Accueil"
+  apply: "Demander un prêt"
+  calculator: "Calculatrice"
+  about: "À propos"
+  contact: "Contact"
+
+# Home page
+home:
+  title: "Accueil"
+  hero:
+    title: "Réalisez vos projets avec nos prêts personnalisés"
+    subtitle: "Solutions de financement rapides, sécurisées et adaptées à vos besoins"
+    apply_now: "Faire une demande"
+    calculate: "Calculer mon prêt"
+  
+  features:
+    title: "Pourquoi nous choisir ?"
+    subtitle: "Des avantages qui font la différence"
+    fast:
+      title: "Réponse rapide"
+      description: "Obtenez une réponse en moins de 24h"
+    secure:
+      title: "100% sécurisé"
+      description: "Vos données sont protégées et confidentielles"
+    rates:
+      title: "Taux compétitifs"
+      description: "Les meilleurs taux du marché"
+  
+  loan_types:
+    title: "Types de prêts disponibles"
+    subtitle: "Choisissez le prêt adapté à votre projet"
+    real_estate: "Immobilier"
+    real_estate_desc: "Pour acheter votre résidence principale ou investir"
+    vehicle: "Automobile"
+    vehicle_desc: "Financez l'achat de votre véhicule neuf ou d'occasion"
+    personal: "Personnel"
+    personal_desc: "Pour tous vos projets personnels"
+    business: "Professionnel"
+    business_desc: "Développez votre activité professionnelle"
+  
+  cta:
+    title: "Prêt à commencer ?"
+    description: "Faites votre demande en quelques minutes seulement"
+    button: "Commencer ma demande"
+  
+  stats:
+    clients: "Clients satisfaits"
+    amount: "Prêts accordés"
+    rating: "Note moyenne"
+    response: "Temps de réponse"
+
+# Apply form
+apply:
+  title: "Demande de prêt"
+  description: "Remplissez ce formulaire pour soumettre votre demande de prêt. Tous les champs marqués d'un * sont obligatoires."
+  personal_info: "Informations personnelles"
+  loan_info: "Détails du prêt"
+  amount_range: "Montant entre %min%€ et %max%€"
+  duration_range: "Durée entre %min% et %max% mois"
+  quick_calc: "Estimation rapide"
+  fill_amount_duration: "Remplissez le montant et la durée pour voir l'estimation"
+  monthly_payment: "Mensualité"
+  total_amount: "Montant total"
+  interest_rate: "Taux d'intérêt"
+  terms_acceptance: "J'accepte les <a href='#'>conditions générales</a> et la <a href='#'>politique de confidentialité</a>"
+  back: "Retour"
+  submit: "Envoyer ma demande"
+
+# Loan status
+status:
+  title: "Statut de votre demande"
+  hello: "Bonjour"
+  reference: "Référence"
+  pending: "En attente"
+  approved: "Approuvé"
+  rejected: "Refusé"
+  processing: "En cours de traitement"
+  pending_message: "Votre demande est en cours d'examen. Nous vous recontacterons sous 24h."
+  approved_message: "Félicitations ! Votre prêt a été approuvé."
+  rejected_message: "Nous sommes désolés, votre demande n'a pas pu être acceptée."
+  processing_message: "Votre dossier est en cours de traitement par nos équipes."
+  loan_details: "Détails du prêt"
+  amount: "Montant"
+  duration: "Durée"
+  months: "mois"
+  purpose: "Objectif"
+  date: "Date de demande"
+  approved_terms: "Conditions approuvées"
+  monthly_payment: "Mensualité"
+  total_amount: "Montant total"
+  need_help: "Besoin d'aide ?"
+  contact_message: "Notre équipe est à votre disposition pour répondre à vos questions."
+  notes: "Notes"
+  next_steps: "Prochaines étapes"
+  step1: "Un conseiller vous contactera dans les prochaines 48h"
+  step2: "Préparation des documents contractuels"
+  step3: "Signature et déblocage des fonds"
+  back_home: "Retour à l'accueil"
+  new_application: "Nouvelle demande"
+
+# Calculator
+calculator:
+  title: "Calculatrice de prêt"
+  description: "Calculez vos mensualités et le coût total de votre prêt"
+  parameters: "Paramètres du prêt"
+  results: "Résultats"
+  amount: "Montant du prêt"
+  duration: "Durée du prêt"
+  months: "mois"
+  interest_rate: "Taux d'intérêt"
+  amount_range: "Entre %min%€ et %max%€"
+  duration_range: "Entre %min% et %max% mois"
+  rate_info: "Taux indicatif, le taux final dépend de votre profil"
+  monthly_payment: "Mensualité"
+  total_amount: "Montant total"
+  total_interest: "Coût du crédit"
+  breakdown: "Répartition"
+  principal: "Capital"
+  interest: "Intérêts"
+  apply_now: "Faire une demande"
+
+# Loan purposes
+purpose:
+  real_estate: "Achat immobilier"
+  renovation: "Rénovation"
+  vehicle: "Achat véhicule"
+  debt_consolidation: "Consolidation de dettes"
+  personal_project: "Projet personnel"
+  investment: "Investissement"
+  other: "Autre"
+
+# Admin
+admin:
+  cancel: "Annuler"
+  loans:
+    title: "Gestion des prêts"
+    filters: "Filtres et recherche"
+    search: "Rechercher"
+    search_placeholder: "Nom, email, téléphone..."
+    search_btn: "Rechercher"
+    status: "Statut"
+    all_status: "Tous les statuts"
+    list: "Liste des demandes"
+    no_loans: "Aucune demande de prêt trouvée"
+    applicant: "Demandeur"
+    amount: "Montant"
+    duration: "Durée"
+    date: "Date"
+    actions: "Actions"
+    approve_loan: "Approuver le prêt"
+    reject_loan: "Refuser le prêt"
+    interest_rate: "Taux d'intérêt"
+    approve: "Approuver"
+    reject: "Refuser"
+    rejection_reason: "Raison du refus"
+    rejection_placeholder: "Expliquez pourquoi cette demande est refusée..."
+  
+  stats:
+    total: "Total des demandes"
+    pending: "En attente"
+    approved: "Approuvées"
+    total_amount: "Montant total accordé"
+  
+  config:
+    title: "Configuration du site"
+
+# Footer
+footer:
+  contact: "Contact"
+  links: "Liens utiles"
+  rights: "Tous droits réservés"

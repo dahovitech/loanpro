@@ -56,6 +56,34 @@ class Loan
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
 
+    // Personal information fields
+    #[ORM\Column(length: 100)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $lastName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $profession = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $employer = null;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    private ?string $monthlyIncome = null;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    private ?string $monthlyCharges = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -277,5 +305,105 @@ class Loan
     public function isRejected(): bool
     {
         return $this->status === 'rejected';
+    }
+
+    // Getters and Setters for personal information
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    public function getProfession(): ?string
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(?string $profession): static
+    {
+        $this->profession = $profession;
+        return $this;
+    }
+
+    public function getEmployer(): ?string
+    {
+        return $this->employer;
+    }
+
+    public function setEmployer(?string $employer): static
+    {
+        $this->employer = $employer;
+        return $this;
+    }
+
+    public function getMonthlyIncome(): ?string
+    {
+        return $this->monthlyIncome;
+    }
+
+    public function setMonthlyIncome(?string $monthlyIncome): static
+    {
+        $this->monthlyIncome = $monthlyIncome;
+        return $this;
+    }
+
+    public function getMonthlyCharges(): ?string
+    {
+        return $this->monthlyCharges;
+    }
+
+    public function setMonthlyCharges(?string $monthlyCharges): static
+    {
+        $this->monthlyCharges = $monthlyCharges;
+        return $this;
     }
 }

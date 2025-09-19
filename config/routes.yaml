@@ -1,0 +1,48 @@
+#controllers:
+#    resource:
+#        path: ../src/Controller/
+#        namespace: App\Controller
+#    type: attribute
+# Redirect root to default locale
+_root:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /fr
+        permanent: true
+
+# Loan routes with locale prefix
+_loan_routes:
+    resource: ../src/Controller/LoanController.php
+    type: attribute
+    prefix: /{_locale}
+    requirements:
+        _locale: fr|en|es|de
+    defaults:
+        _locale: fr
+
+# Security routes with locale prefix
+_security_routes:
+    resource: ../src/Controller/SecurityController.php
+    type: attribute
+    prefix: /{_locale}
+    requirements:
+        _locale: fr|en|es|de
+    defaults:
+        _locale: fr
+
+# Registration routes with locale prefix
+_registration_routes:
+    resource: ../src/Controller/RegistrationController.php
+    type: attribute
+    prefix: /{_locale}
+    requirements:
+        _locale: fr|en|es|de
+    defaults:
+        _locale: fr
+
+# Admin routes (no locale prefix for admin)
+_admin_routes:
+    resource: ../src/Controller/Admin/
+    type: attribute
+    prefix: /admin
